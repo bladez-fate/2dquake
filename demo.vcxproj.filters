@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="System Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="2dquake">
+      <UniqueIdentifier>{87e972f6-3ccb-492b-a91e-ad7c1f11638e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{9685e56b-34c6-47fe-9df4-c672964219c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>System Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>System Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\2dqdefs.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\arctic.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\defs.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graph.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\keyboard.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\keydefs2.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\menu.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="src\textmode.h">
+      <Filter>2dquake</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\arctic_input.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\arctic_math.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\arctic_platform.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\arctic_platform_def.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\arctic_types.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\bound2f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\bound3f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\byte_array.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\easy.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\easy_sound.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\easy_sound_instance.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\easy_sprite.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\easy_sprite_instance.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\frustum3f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\mat22f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\mat33f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\mat44f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\opengl.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\rgb.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\rgba.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\scalar_math.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\vec2f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\vec2si32.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\vec3f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\vec3si32.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\vec4f.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\arctic\engine\vec4si32.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="demo.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app_icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="small_app_icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\arctic.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bots.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bullets.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graph.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\items.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mainedit.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\maps.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menu.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\players.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systemfn.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="src\viewtool.cpp">
+      <Filter>2dquake</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\arctic_input.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\arctic_math.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\arctic_platform_windows.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\byte_array.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\easy.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\easy_sound.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\easy_sound_instance.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\easy_sprite.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\easy_sprite_instance.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\arctic\engine\engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
