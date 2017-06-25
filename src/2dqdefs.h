@@ -28,10 +28,10 @@ Copyleft by bladez-fate
 
 
 /* Blt Types Defines */
-#define A_BLOOD   25   // Blood Life Time
-#define A_SMOKE   10   // Smoke Life Time
-#define A_SMOKE2  10   // Smoke2 Life Time
-#define A_GILZA   300   // (Gilza Life Time)*6
+#define A_BLOOD   35   // Blood Life Time
+#define A_SMOKE   15   // Smoke Life Time
+#define A_SMOKE2  15   // Smoke2 Life Time
+#define A_GILZA   400   // (Gilza Life Time)*6
 #define BALL_FRM_CHANGE 20
 #define BALL_SZ   8
 #define BALL_MASS 4
@@ -41,7 +41,7 @@ Copyleft by bladez-fate
 #define B_SHELL   0   // ID Number //
 #define BA_SHELL  20  // Ammo in Pack //
 #define D_SHELL   15  // Damage //
-#define R_SHELL   35  // Reload After Fire It //
+#define R_SHELL   30  // Reload After Fire It //
 #define A_SHELL   90  // Life Time //
 #define S_SHELL   2   // Bullet Speed / --- / *C_SHELL //
 #define C_SHELL   8   // Speed Multiplier //
@@ -49,9 +49,9 @@ Copyleft by bladez-fate
 #define B_ARROW   1
 #define BA_ARROW  15
 #define D_ARROW   70
-#define R_ARROW   70
+#define R_ARROW   60
 #define A_ARROW   80
-#define S_ARROW   3
+#define S_ARROW   2
 #define C_ARROW   2
 
 #define B_AKM     2
@@ -63,12 +63,13 @@ Copyleft by bladez-fate
 #define BA_NAPALM 15
 #define D_NAPALM  50
 #define D_NAPALM2 1
-#define R_NAPALM  60
+#define R_NAPALM  18
 #define A_NAPALM  120
-#define A_NAPALM2 2450
-#define FD_NAPALM2 14
+#define A_NAPALM2 2000
+#define FD_NAPALM2 20
 #define BRK_NAPALM 1.5
-#define S_NAPALM  3
+#define S_NAPALM  1.5
+#define C_NAPALM  2
 
 #define B_ROCKET     4
 #define BA_ROCKET    5
@@ -76,13 +77,13 @@ Copyleft by bladez-fate
 #define DF_ROCKET  100
 #define RNGN_ROCKET 25
 #define RNGF_ROCKET 60
-#define R_ROCKET   110
+#define R_ROCKET    80
 #define A_ROCKET   250
 #define S_ROCKET     4
 
 #define B_PHOTO      5
 #define BA_PHOTO     1
-#define R_PHOTO      35
+#define R_PHOTO      30
 #define NA_PHOTO     150
 #define DN_PHOTO     300
 #define DF_PHOTO     150
@@ -97,7 +98,8 @@ Copyleft by bladez-fate
 #define RNGN_GRENADE 20
 #define RNGF_GRENADE 55
 #define S_GRENADE    3
-#define A_GRENADE    180
+#define SP_GRENADE   2
+#define A_GRENADE    150
 #define R_GRENADE    40
 
 #define B_REDMER     7
@@ -106,7 +108,7 @@ Copyleft by bladez-fate
 #define DF_REDMER    200
 #define RNGN_REDMER  60
 #define RNGF_REDMER  140
-#define S_REDMER     2
+#define S_REDMER     3
 #define R_REDMER     60
 #define SZ_REDMER    1
 #define SZB_REDMER   3
@@ -116,7 +118,7 @@ Copyleft by bladez-fate
 #define D_LASER      24
 #define MD_LASER     200
 #define R_LASER      24
-#define S_LASER      2
+#define S_LASER      4
 #define C_LASER      4
 
 /* Izvrat Defines */
@@ -128,10 +130,10 @@ Copyleft by bladez-fate
 #define NEEDDEAD_TIME 25
 
 /* Items Defines */
-#define T_RESPAWN   2500
+#define T_RESPAWN   1500
 #define T_CORPSE    20000
-#define H_MEDIKIT   70
-#define H_BODYARMR  100
+#define H_MEDIKIT   75
+#define H_BODYARMR  150
 
 /* Items Type Defines (for Bots) */
 #define M_IT         16
@@ -169,7 +171,7 @@ Copyleft by bladez-fate
 #define M_MASK    31
 #define M_PLRFRM  16
 #define V_SZ      12
-#define V_SZ2     150
+#define V_SZ2     250
 #define V_FOV     (M_PI/2)
 #define P_SZ      5
 #define F_LEN     8
@@ -185,7 +187,7 @@ Copyleft by bladez-fate
 #define A_5       (M_PI/4*5)
 #define A_6       (M_PI/2*3)
 #define A_7       (M_PI/4*7)
-#define P_ACC     0.14
+#define P_ACC     0.2
 #define P_TRN     (M_PI/64)
 #define P_TRN2    (M_PI/256)
 #define M_HEALTH  200

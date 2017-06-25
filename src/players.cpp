@@ -173,8 +173,8 @@ void M_Battle(PLAYER *pl)
 	}
 	if (!yb) pl->y = pl->y + pl->sy;
 
-	pl->sx = pl->sx*0.85;
-	pl->sy = pl->sy*0.85;
+	pl->sx = pl->sx*0.88;
+	pl->sy = pl->sy*0.88;
 	if (pl->firefrm) pl->firefrm--;
 	if (pl->damgfrm) pl->damgfrm--;
 	if (pl->reload) pl->reload--;
@@ -490,8 +490,8 @@ void MC_Battle(PLAYER *pl)
 			blt[i].own = pl->n;
 			blt[i].x = pl->x + WPN_RANGE*cos(pl->a);
 			blt[i].y = pl->y - WPN_RANGE*sin(pl->a);
-			blt[i].sx = S_GRENADE*cos(pl->a);
-			blt[i].sy = -S_GRENADE*sin(pl->a);
+			blt[i].sx = SP_GRENADE * pl->sx + S_GRENADE*cos(pl->a);
+			blt[i].sy = SP_GRENADE * pl->sy - S_GRENADE*sin(pl->a);
 			if (pl->cmnd[C_ACC]) {
 				blt[i].sx += (fabs(pl->sx) < 1) ? (pl->sx * 6) : (sgn(pl->sx) * 6);
 				blt[i].sy += (fabs(pl->sy) < 1) ? (pl->sy * 6) : (sgn(pl->sy) * 6);

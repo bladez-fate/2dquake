@@ -15,8 +15,8 @@ using namespace arctic;
 using namespace arctic::easy;
 
 namespace screen {
-	constexpr int w = 640;
-	constexpr int h = 400;
+	constexpr int w = 320 * 3 / 2;
+	constexpr int h = 200 * 3 / 2;
 	constexpr int size = w*h;
 
 	constexpr int cx = w / 2;

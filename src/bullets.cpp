@@ -181,41 +181,44 @@ void B_ArrowHandler(void *b)
 void B_NapalmHandler(void *b)
 {
     bl->age++;
-    Si16 ix,iy;
-    ix=bl->x+bl->sx;iy=bl->y+bl->sy;
-    if(!FF_BltMov(ix,iy)) {bl->age=0;return;}
-    if(bl->age>A_NAPALM) {bl->age=0;return;}
-    bl->x+=bl->sx;bl->y+=bl->sy;
+	if (bl->age > A_NAPALM) { bl->age = 0; return; }
+	
+	Si16 ix,iy;
+	for (Si16 count = 0; count < C_NAPALM; count++) {
+		ix = bl->x + bl->sx; iy = bl->y + bl->sy;
+		if (!FF_BltMov(ix, iy)) { bl->age = 0; return; }
+		bl->x += bl->sx; bl->y += bl->sy;
 
-    for(Si16 i=0;i<Players;i++) {
-        if(plr[i].State<=0) continue;
-        if(bl->x>=plr[i].x-P_SZ && bl->y>=plr[i].y-P_SZ && bl->x<=plr[i].x+P_SZ && bl->y<=plr[i].y+P_SZ) {
-            CheckFrag=1;
-            plr[i].sx+=bl->sx/3;
-            plr[i].sy+=bl->sy/3;
-            plr[i].damage+=D_NAPALM;
-            plr[i].damageown=bl->own;
-            plr[i].damgfrm=D_LEN;
-            for(Si16 a=0;a<2;a++) {
-                Si16 j;NextFreeBlt();j=BltFst;
-                blt[j].age=1+Random(6);
-                blt[j].own=i;
-                blt[j].x=bl->x-3+Random(7);
-                blt[j].y=bl->y-3+Random(7);
-                blt[j].sx=bl->sx*2+(double)(-10+Random(21))/15.;
-                blt[j].sy=bl->sy*2+(double)(-10+Random(21))/15.;
-                blt[j].Handler=B_BloodHandler;
-                blt[j].Draw=B_BloodDraw;
-            }
-            bl->age=1;
-            bl->x=i;
-            bl->y=plr[i].hp;
-            bl->sx=plr[i].armr;
-            bl->Handler=B_Napalm2Handler;
-            bl->Draw=EmptyDraw;
-            plr[i].acc=P_ACC/BRK_NAPALM;
-        }
-    }
+		for (Si16 i = 0; i < Players; i++) {
+			if (plr[i].State <= 0) continue;
+			if (bl->x >= plr[i].x - P_SZ && bl->y >= plr[i].y - P_SZ && bl->x <= plr[i].x + P_SZ && bl->y <= plr[i].y + P_SZ) {
+				CheckFrag = 1;
+				plr[i].sx += bl->sx / 3;
+				plr[i].sy += bl->sy / 3;
+				plr[i].damage += D_NAPALM;
+				plr[i].damageown = bl->own;
+				plr[i].damgfrm = D_LEN;
+				for (Si16 a = 0; a < 2; a++) {
+					Si16 j; NextFreeBlt(); j = BltFst;
+					blt[j].age = 1 + Random(6);
+					blt[j].own = i;
+					blt[j].x = bl->x - 3 + Random(7);
+					blt[j].y = bl->y - 3 + Random(7);
+					blt[j].sx = bl->sx * 2 + (double)(-10 + Random(21)) / 15.;
+					blt[j].sy = bl->sy * 2 + (double)(-10 + Random(21)) / 15.;
+					blt[j].Handler = B_BloodHandler;
+					blt[j].Draw = B_BloodDraw;
+				}
+				bl->age = 1;
+				bl->x = i;
+				bl->y = plr[i].hp;
+				bl->sx = plr[i].armr;
+				bl->Handler = B_Napalm2Handler;
+				bl->Draw = EmptyDraw;
+				plr[i].acc = P_ACC / BRK_NAPALM;
+			}
+		}
+	}
 }
 
 void B_Napalm2Handler(void *b)

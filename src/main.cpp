@@ -800,8 +800,8 @@ void Kill(BYTE n,BYTE corpse,Si16 a,BYTE killer)
             blt[i].own=n;
             blt[i].x=plr[n].x+WPN_RANGE*cos(plr[n].a);
             blt[i].y=plr[n].y-WPN_RANGE*sin(plr[n].a);
-            blt[i].sx=S_GRENADE*cos(plr[n].a);
-            blt[i].sy=-S_GRENADE*sin(plr[n].a);
+			blt[i].sx = (SP_GRENADE * plr[n].sx + S_GRENADE*cos(plr[n].a))/2;
+			blt[i].sy = (SP_GRENADE * plr[n].sy - S_GRENADE*sin(plr[n].a))/2;
             blt[i].Handler=B_GrenadeHandler;
             blt[i].Draw=B_GrenadeDraw;
         }

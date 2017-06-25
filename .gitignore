@@ -36,3 +36,4 @@
 *.opendb
 *.ilk
 x64/
+.vs/
