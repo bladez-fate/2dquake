@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# MSVS artifacts
+*.db
+*.opendb
+*.ilk
+x64/
