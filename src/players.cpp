@@ -325,7 +325,7 @@ void MC_Battle(PLAYER *pl)
 				}
 				else if (pl->wpn[B_LASER] > 1 && pl->wpn[B_LASER] - 1 < MD_LASER)
 				{
-					DrawStatistics = 1; pl->wpn[B_LASER]++; if (!(pl->wpn[B_LASER] % 4))pl->ammo[B_LASER]--;
+					DrawStatistics = 1; pl->wpn[B_LASER]+=2; if (pl->wpn[B_LASER] % 8 == 1)pl->ammo[B_LASER]--;
 				}
 			}
 			else {

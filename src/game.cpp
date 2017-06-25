@@ -16,7 +16,7 @@ char Name2[80];
 char BotFileName[80];
 char ItemFileName[80];
 
-Si16 MaxAmmo[M_WPN] = { 200,150,300,50,30,5,10,1,750 };
+Si16 MaxAmmo[M_WPN] = { 200,150,300,50,30,5,10,1,2000 };
 Si16 AddAmmo[M_WPN] = { BA_SHELL,BA_ARROW,BA_AKM,BA_NAPALM,BA_ROCKET,BA_PHOTO,BA_GRENADE,BA_REDMER,BA_LASER };
 
 //Si16 NetStatus;

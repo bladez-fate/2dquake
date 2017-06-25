@@ -114,10 +114,10 @@ Copyleft by bladez-fate
 #define SZB_REDMER   3
 
 #define B_LASER      8
-#define BA_LASER     125
+#define BA_LASER     300
 #define D_LASER      24
 #define MD_LASER     200
-#define R_LASER      24
+#define R_LASER      20
 #define S_LASER      4
 #define C_LASER      4
 

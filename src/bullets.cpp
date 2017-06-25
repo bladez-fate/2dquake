@@ -748,8 +748,8 @@ void B_LaserHandler(void *b)
             if(plr[i].State<=0) continue;
             if(bl->x>=plr[i].x-P_SZ && bl->y>=plr[i].y-P_SZ && bl->x<=plr[i].x+P_SZ && bl->y<=plr[i].y+P_SZ) {
                 CheckFrag=1;
-                plr[i].sx+=bl->sx*bl->age*3/MD_LASER;
-                plr[i].sy+=bl->sy*bl->age*3/MD_LASER;
+                plr[i].sx+=bl->sx*bl->age*2/MD_LASER;
+                plr[i].sy+=bl->sy*bl->age*2/MD_LASER;
                 plr[i].damage+=bl->age;
                 plr[i].damageown=bl->own;
                 plr[i].damgfrm=D_LEN;
