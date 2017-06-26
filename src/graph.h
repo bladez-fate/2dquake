@@ -15,8 +15,8 @@ using namespace arctic;
 using namespace arctic::easy;
 
 namespace screen {
-	constexpr int w = 320 * 3 / 2;
-	constexpr int h = 200 * 3 / 2;
+	constexpr int w = 640; // 320 * 3 / 2;
+	constexpr int h = 400; // 200 * 3 / 2;
 	constexpr int size = w*h;
 
 	constexpr int cx = w / 2;
@@ -69,14 +69,13 @@ extern tPALETTE g_palette;
 
 struct FogFilter {
 	// Config
-	static constexpr size_t angSize = 1024;
+	static constexpr Ui16 angSize = 1024;
 	static constexpr float angDelta = 2.0f * float(M_PI) / angSize;
-	static constexpr float blurSightTan = float(M_PI) / 10.0f;
-	static constexpr float maxSightDistance = 180.0f;
-	static constexpr float clearSightDistance = 90.0f;
-	static constexpr float minSightDistance = 7.0f;
-	static constexpr float minLight = 0.25f;
-	static constexpr float maxLight = 1.0f;
+	static constexpr int maxSightDistance = 180;
+	static constexpr int clearSightDistance = 90;
+	static constexpr int minSightDistance = 7;
+	static constexpr int minLight = 64;
+	static constexpr int maxLight = 256;
 
 	int x1;
 	int y1;
@@ -85,24 +84,25 @@ struct FogFilter {
 	int cx;
 	int cy;
 	struct PixelData {
-		float r = 0.0f; // distance to the pixel center
-		size_t a = 0; // ang[] index of center of the pixel
+		int r = 0; // distance to the pixel center
+		Ui16 a = 0; // ang[] index of center of the pixel
 
 		// relevant ang[] indices are [rho1idx; rho2idx)
-		size_t a1 = 0;
-		size_t a2 = 0;
-		float maxLight = 1.0f;
+		Ui16 a1 = 0;
+		Ui16 a2 = 0;
+		int maxLight = 1;
 	};
 	std::vector<PixelData> pxl;
+	std::vector<int> fadeLight;
 
 	// State
 	bool enabled = false;
-	size_t fov_a1;
-	size_t fov_a2;
+	Ui16 fov_a1;
+	Ui16 fov_a2;
 
 	// Frame data
 	struct AngleData {
-		float sightDistance = maxSightDistance;
+		Ui16 sightDistance = maxSightDistance;
 	};
 	std::vector<AngleData> ang;
 
@@ -112,14 +112,20 @@ struct FogFilter {
 	{
 		ang.resize(angSize);
 		pxl.resize(screen::size);
+
+		fadeLight.resize(screen::w + screen::h);
+		for (size_t i = 0; i < fadeLight.size(); i++) {
+			fadeLight[i] = std::max(minLight, 256 - 32 * int(i));
+		}
+
 		for (int y = y1; y <= y2; y++) {
 			for (int x = x1; x <= x2; x++) {
 				size_t pos = screen::pixel(x, y);
 				PixelData& p = pxl[pos];
 				int dx = x - cx;
 				int dy = y - cy;
-				p.r = sqrt(dx*dx + dy*dy);
-				p.maxLight = maxLight - (p.r - clearSightDistance) / (maxSightDistance - clearSightDistance) * (maxLight - minLight);
+				p.r = (int)(sqrt(dx*dx + dy*dy) + 0.5f);
+				p.maxLight = maxLight - (p.r - clearSightDistance) * (maxLight - minLight) / (maxSightDistance - clearSightDistance);
 				p.maxLight = std::min(maxLight, std::max(minLight, p.maxLight));
 				if (p.r > 0.0f) {
 					p.a = Angle(atan2(dy, dx));
@@ -146,9 +152,9 @@ struct FogFilter {
 		}
 	}
 
-	size_t Angle(double a)
+	Ui16 Angle(double a)
 	{
-		return size_t((a + 2 * M_PI) / angDelta) % angSize;
+		return Ui16((a + 2 * M_PI) / angDelta) % angSize;
 	}
 
 	void Refresh()
@@ -172,15 +178,15 @@ struct FogFilter {
 	void AddOpaquePixel(size_t pos)
 	{
 		PixelData& p = pxl[pos];
-		for (size_t a = p.a1; a != p.a2; a++) {
+		for (Ui16 a = p.a1; a != p.a2; a++) {
 			if (a == angSize) {
 				a = 0;
 			}
-			ang[a].sightDistance = std::max(minSightDistance, std::min(ang[a].sightDistance, p.r));
+			ang[a].sightDistance = std::max<int>(minSightDistance, std::min<int>(ang[a].sightDistance, p.r));
 		}
 	}
 
-	bool FovVisible(size_t a) const
+	bool FovVisible(Ui16 a) const
 	{
 		if (fov_a1 <= fov_a2) { // special point outside FOV
 			return a >= fov_a1 && a < fov_a2;
@@ -190,7 +196,7 @@ struct FogFilter {
 		}
 	}
 
-	size_t AngleDistance(size_t a, size_t b) const
+	Ui16 AngleDistance(Ui16 a, Ui16 b) const
 	{
 		if (a <= b) {
 			return std::min(b - a, a + angSize - b);
@@ -198,7 +204,7 @@ struct FogFilter {
 		return AngleDistance(b, a);
 	}
 
-	size_t OutOfFov(size_t a) const
+	Ui16 OutOfFov(Ui16 a) const
 	{
 		return std::min({
 			AngleDistance(a, fov_a1),
@@ -206,19 +212,29 @@ struct FogFilter {
 		});
 	}
 
+	static Rgba Mult(Rgba c, Ui32 m)
+	{
+		Ui32 rb = c.rgba & 0x00ff00ff;
+		Ui32 rbm = ((rb * m) >> 8) & 0x00ff00ff;
+		Ui32 ga = (c.rgba >> 8) & 0x00ff00ff;
+		Ui32 gam = ((ga * m)) & 0xff00ff00;
+		return Rgba(rbm | gam);
+	}
+
 	Rgba Apply(size_t pos, Rgba c) const
 	{
 		if (enabled) {
 			const PixelData& p = pxl[pos];
-			float directSight = ang[p.a].sightDistance;
-			float directSightDelta = p.r - directSight;
-			float l = std::min(p.maxLight, std::max(minLight, 1.0f - 0.1f * directSightDelta));
+			int directSight = ang[p.a].sightDistance;
+			int directSightDelta = p.r - directSight;
+			int l = std::min(p.maxLight, directSightDelta>0? fadeLight[directSightDelta]: 256);
+			//int l = std::min(p.maxLight, std::max(minLight, 256 - 32 * directSightDelta));
 			if (!FovVisible(p.a)) {
-				float outOfFov = OutOfFov(p.a);
-				float darkness = std::min(outOfFov, std::max(0.0f, p.r - 8.0f) * 16.0f);
-				l = std::min(l, std::max(minLight, 1.0f - 0.01f * darkness));
+				int outOfFov = (int)OutOfFov(p.a);
+				int darkness = std::min(outOfFov, std::max(0, p.r - 8) * 16);
+				l = std::min(l, std::max(minLight, 256 - 4*darkness));
 			}
-			return Rgba(c.r * l, c.g * l, c.b * l, c.a);
+			return Mult(c, l);
 		}
 		return c;
 	}
@@ -308,8 +324,9 @@ struct FilterList {
 	}
 };
 
-void EnableFilters(FilterList* filters);
-void DisableFilters();
+//void EnableFilters(FilterList* filters);
+//void DisableFilters();
+void ApplyFilters(FilterList* filters);
 
 inline void ToPalAll(tPALETTE &Dst, tPALETTE &Src);
 inline void PalCopy(tPALETTE &Dst, tPALETTE &Src);

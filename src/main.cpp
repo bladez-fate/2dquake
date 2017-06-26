@@ -120,6 +120,24 @@ void VIEWPORT::ClearMessages(void)
 	MsgCounter[0] = 0;
 }
 
+//void VIEWPORT::ForEachVisibleBullet(std::function<void(OBJECT*, int x, int y)> func)
+//{
+//	Si16 CodeCur = 0;
+//	while (CodeCur != plrevn[ActPlayer].Length) {
+//		if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEBLT) {
+//			i = *((WORD *)(plrevn[ActPlayer].Code + CodeCur + 1));
+//			OBJECT* bl = blt[i];
+//			func(bl, bl->x - x + scr_x1, bl->y - y + scr_y1);
+//		}
+//		CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
+//	}
+//}
+//
+//void VIEWPORT::ForEachPlayer(std::function<void(OBJECT*)> func)
+//{
+//
+//}
+
 void VIEWPORT::Show(void)
 {
 	MakeBufferWindow(scr_x1, scr_y1, scr_x2, scr_y2);
@@ -131,7 +149,7 @@ void VIEWPORT::Show(void)
 	}
 	dmgFilter->Refresh(plr[ActPlayer].damageLast);
 
-	EnableFilters(&filters);
+	//EnableFilters(&filters);
 
 	constexpr BYTE defaultTile = 1;
 
@@ -305,7 +323,7 @@ void VIEWPORT::Show(void)
         }
     }
 
-	DisableFilters();
+	ApplyFilters(&filters);
 
 	// Bot Point for Debug
 	if (showBotPoints) {
@@ -375,7 +393,7 @@ void VIEWPORT::Show(void)
     SetTextJust(2,0);
     NoBufferWindow();
     /* Draw Statistics */
-	if (DrawStatistics) {
+	if (true || DrawStatistics) {
 		SetColor(0);
 		FrameRect(scr_x1 - 1, scr_y1 - 1, scr_x2 + 1, scr_y2 + 1);
 		SetColor(47);

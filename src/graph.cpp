@@ -12,8 +12,8 @@
 
 #include "graph.h"
 
-BYTE Color = 0;
-Rgba ColorRgba(0, 0, 0);
+BYTE g_color = 0;
+Rgba g_colorRgba(0, 0, 0);
 int bw_x1 = 0;
 int bw_y1 = 0;
 int bw_x2 = screen::w - 1;
@@ -24,33 +24,34 @@ BYTE fnJustY;
 tFONT g_font;
 tPALETTE g_palette;
 Rgba g_paletteData[256];
+Rgba* g_backBuffer = nullptr;
 
-static FilterList* g_activeFilters = nullptr;
+//static FilterList* g_activeFilters = nullptr;
 
-void EnableFilters(FilterList* filters)
-{
-	g_activeFilters = filters;
-}
+//void EnableFilters(FilterList* filters)
+//{
+//	g_activeFilters = filters;
+//}
+//
+//void DisableFilters()
+//{
+//	g_activeFilters = nullptr;
+//}
 
-void DisableFilters()
-{
-	g_activeFilters = nullptr;
-}
-
-inline Rgba FltCol(size_t pos, Rgba c)
-{
-	if (g_activeFilters) {
-		return g_activeFilters->Apply(pos, c);
-	}
-	else {
-		return c;
-	}
-}
+//inline Rgba FltCol(size_t pos, Rgba c)
+//{
+//	if (g_activeFilters) {
+//		return g_activeFilters->Apply(pos, c);
+//	}
+//	else {
+//		return c;
+//	}
+//}
 
 void SetColor(BYTE a)
 {
-	Color = a;
-	ColorRgba = g_paletteData[a];
+	g_color = a;
+	g_colorRgba = g_paletteData[a];
 }
 
 inline void SetPal(BYTE index, BYTE red, BYTE green, BYTE blue)
@@ -138,6 +139,17 @@ void PalCopy(tPALETTE &Dst, tPALETTE &Src)
 	memcpy(Dst.Bits, Src.Bits, 768);
 }
 
+void ApplyFilters(FilterList* filters)
+{
+	Rgba* bb = g_backBuffer;
+	Rgba* bbe = g_backBuffer + screen::size;
+
+	size_t pos = 0;
+	for (; bb != bbe; bb++, pos++) {
+		*bb = filters->Apply(pos, *bb);
+	}
+}
+
 void ShowScreen(void)
 {
 	ShowFrame();
@@ -146,14 +158,15 @@ void ShowScreen(void)
 BYTE InitGraph(void)
 {
 	ResizeScreen(screen::w, screen::h);
+	g_backBuffer = GetEngine()->GetBackbuffer().RgbaData();
 	Clear();
 	ShowFrame();
-    return 1;
+	return 1;
 }
 
 void SetPixelColorRgba(size_t pos, Rgba colorRgba)
 {
-	GetEngine()->GetBackbuffer().RgbaData()[pos] = FltCol(pos, colorRgba);
+	g_backBuffer[pos] = colorRgba; // FltCol(pos, colorRgba);
 }
 
 void SetPixelColor(size_t pos, BYTE color)
@@ -168,7 +181,7 @@ void SetPixelColor(int x, int y, BYTE color)
 
 void SetPixel(size_t pos)
 {
-	SetPixelColorRgba(pos, ColorRgba);
+	SetPixelColorRgba(pos, g_colorRgba);
 }
 
 void SetPixel(int x, int y) 
