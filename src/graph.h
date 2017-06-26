@@ -72,8 +72,11 @@ struct FogFilter {
 	static constexpr size_t angSize = 1024;
 	static constexpr float angDelta = 2.0f * float(M_PI) / angSize;
 	static constexpr float blurSightTan = float(M_PI) / 10.0f;
-	static constexpr float maxSightDistance = 1000.0f;
+	static constexpr float maxSightDistance = 180.0f;
+	static constexpr float clearSightDistance = 90.0f;
 	static constexpr float minSightDistance = 7.0f;
+	static constexpr float minLight = 0.25f;
+	static constexpr float maxLight = 1.0f;
 
 	int x1;
 	int y1;
@@ -88,6 +91,7 @@ struct FogFilter {
 		// relevant ang[] indices are [rho1idx; rho2idx)
 		size_t a1 = 0;
 		size_t a2 = 0;
+		float maxLight = 1.0f;
 	};
 	std::vector<PixelData> pxl;
 
@@ -95,7 +99,6 @@ struct FogFilter {
 	bool enabled = false;
 	size_t fov_a1;
 	size_t fov_a2;
-	float min_light = 0.4f;
 
 	// Frame data
 	struct AngleData {
@@ -116,6 +119,8 @@ struct FogFilter {
 				int dx = x - cx;
 				int dy = y - cy;
 				p.r = sqrt(dx*dx + dy*dy);
+				p.maxLight = maxLight - (p.r - clearSightDistance) / (maxSightDistance - clearSightDistance) * (maxLight - minLight);
+				p.maxLight = std::min(maxLight, std::max(minLight, p.maxLight));
 				if (p.r > 0.0f) {
 					p.a = Angle(atan2(dy, dx));
 					auto a = std::minmax({
@@ -207,11 +212,11 @@ struct FogFilter {
 			const PixelData& p = pxl[pos];
 			float directSight = ang[p.a].sightDistance;
 			float directSightDelta = p.r - directSight;
-			float l = std::min(1.0f, std::max(min_light, 1.0f - 0.1f * directSightDelta));
+			float l = std::min(p.maxLight, std::max(minLight, 1.0f - 0.1f * directSightDelta));
 			if (!FovVisible(p.a)) {
 				float outOfFov = OutOfFov(p.a);
 				float darkness = std::min(outOfFov, std::max(0.0f, p.r - 8.0f) * 16.0f);
-				l = std::min(l, std::max(min_light, 1.0f - 0.01f * darkness));
+				l = std::min(l, std::max(minLight, 1.0f - 0.01f * darkness));
 			}
 			return Rgba(c.r * l, c.g * l, c.b * l, c.a);
 		}
