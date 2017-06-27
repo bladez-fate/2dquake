@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="System Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="2dquake">
       <UniqueIdentifier>{87e972f6-3ccb-492b-a91e-ad7c1f11638e}</UniqueIdentifier>
     </Filter>
@@ -13,12 +9,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>System Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>System Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\2dqdefs.h">
       <Filter>2dquake</Filter>
     </ClInclude>
