@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+extern Si64 GameStep;
+extern Si16 SecondCounter;
 extern long GameTime;
 extern tIMAGE Map;
 extern VIEWPORT vp[2];
@@ -24,7 +26,6 @@ extern char ItemFileName[80];
 extern Si16 MaxAmmo[M_WPN];
 extern Si16 AddAmmo[M_WPN];
 
-extern Si16 SecondCounter;
 extern BYTE Campaign;
 extern BYTE TryExit;
 extern BYTE EndGame;   // EG_NOEG || EG_TIMELIMIT || EG_FRAGLIMIT //

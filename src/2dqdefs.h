@@ -272,6 +272,7 @@ Copyleft by bladez-fate
 #define BC_RANDOM    1
 
 //#define _TEST
+#define Q2D_DEVMODE
 
 #pragma pack(push, 1)
 struct PLAYER
@@ -297,6 +298,7 @@ struct PLAYER
     Si16   ammo[M_WPN];    // Amount of Ammo for Weapons
     Si16   frag;           // Amount of Frags
     Si16   reload;         // Reload Time Left (0 - Can Fire   >0 - Can't Fire)
+	long   lastDead = 0;   // Game time of last death
 
     BYTE   n;              // Player Index in Primary Array
 
@@ -350,8 +352,8 @@ struct VIEWPORT
 	VIEWPORT();
 	void Init(Si16 _scr_x1, Si16 _scr_y1, Si16 _scr_x2, Si16 _scr_y2);
 
-	void ForEachVisibleBullet(std::function<void(OBJECT*)> func);
-	void ForEachPlayer(std::function<void(OBJECT*)> func);
+	void ForEachVisibleBullet(std::function<void(OBJECT* bl, int x, int y)> func);
+	void ForEachVisiblePlayer(std::function<void(PLAYER* pl, int x, int y)> func);
 
 	void ShowPoints(void);
     void Show(void);
@@ -362,6 +364,16 @@ struct VIEWPORT
 	Vec2Si32 Screen2World(const Vec2Si32& scr) const
 	{
 		return Vec2Si32(scr.x - scr_x1 + x, scr.y - scr_y1 + y);
+	}
+
+	int ScreenX(int worldX) const
+	{
+		return worldX - x + scr_x1;
+	}
+
+	int ScreenY(int worldY) const
+	{
+		return worldY - y + scr_y1;
 	}
 
 	Vec2Si32 ScreenCenter() const

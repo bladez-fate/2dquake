@@ -1,6 +1,8 @@
 #include "game.h"
 
+Si64 GameStep;
 long GameTime;
+Si16 SecondCounter;
 tIMAGE Map;
 VIEWPORT vp[2];
 OBJECT *blt;
@@ -20,7 +22,6 @@ Si16 MaxAmmo[M_WPN] = { 200,150,300,50,30,5,10,1,2000 };
 Si16 AddAmmo[M_WPN] = { BA_SHELL,BA_ARROW,BA_AKM,BA_NAPALM,BA_ROCKET,BA_PHOTO,BA_GRENADE,BA_REDMER,BA_LASER };
 
 //Si16 NetStatus;
-Si16 SecondCounter;
 BYTE Campaign;
 BYTE TryExit;
 BYTE EndGame;   // EG_NOEG || EG_TIMELIMIT || EG_FRAGLIMIT //

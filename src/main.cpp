@@ -120,32 +120,83 @@ void VIEWPORT::ClearMessages(void)
 	MsgCounter[0] = 0;
 }
 
-//void VIEWPORT::ForEachVisibleBullet(std::function<void(OBJECT*, int x, int y)> func)
-//{
-//	Si16 CodeCur = 0;
-//	while (CodeCur != plrevn[ActPlayer].Length) {
-//		if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEBLT) {
-//			i = *((WORD *)(plrevn[ActPlayer].Code + CodeCur + 1));
-//			OBJECT* bl = blt[i];
-//			func(bl, bl->x - x + scr_x1, bl->y - y + scr_y1);
-//		}
-//		CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
-//	}
-//}
-//
-//void VIEWPORT::ForEachPlayer(std::function<void(OBJECT*)> func)
-//{
-//
-//}
+void VIEWPORT::ForEachVisibleBullet(std::function<void(OBJECT* bl, int x, int y)> func)
+{
+	if (NoFocusing) {
+		for (Si16 i = 0; i < BltExt; i++) {
+			OBJECT* bl = &blt[i];
+			if (bl->age) {
+				func(bl, ScreenX(bl->x), ScreenY(bl->y));
+			}
+		}
+	}
+	else {
+		Si16 CodeCur = 0;
+		while (CodeCur != plrevn[ActPlayer].Length) {
+			if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEBLT) {
+				WORD i = *((WORD *)(plrevn[ActPlayer].Code + CodeCur + 1));
+				OBJECT* bl = &blt[i];
+				func(bl, ScreenX(bl->x), ScreenY(bl->y));
+			}
+			CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
+		}
+	}
+}
+
+void VIEWPORT::ForEachVisiblePlayer(std::function<void(PLAYER* pl, int x, int y)> func)
+{
+	if (NoFocusing) {
+		for (Si16 i = 0; i < Players; i++) {
+			PLAYER* pl = &plr[i];
+			if (pl->State > 0) {
+				func(pl, ScreenX(pl->x), ScreenY(pl->y));
+			}
+		}
+	}
+	else {
+		Si16 CodeCur = 0;
+		while (CodeCur != plrevn[ActPlayer].Length) {
+			if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEPLR) {
+				WORD i = plrevn[ActPlayer].Code[CodeCur + 1];
+				PLAYER* pl = &plr[i];
+				func(pl, ScreenX(pl->x), ScreenY(pl->y));
+			}
+			CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
+		}
+	}
+}
+
+void DrawPlayer(PLAYER* pl, int x, int y)
+{
+	BYTE da = ((BYTE)((pl->a + M_PI / 16) * 8 / M_PI)) % 16;
+	if (pl->damgfrm) {
+		DrawSWUImage(x - 15, y - 15, pl->n, PldImg + da);
+	}
+	else if (pl->firefrm) {
+		DrawSWUImage(x - 15, y - 15, pl->n, PlfImg + da);
+	}
+	else {
+		BYTE aa = F_MovFrm[pl->movefrm / M_STEPLEN];
+		if (aa == 0) {
+			DrawSWUImage(x - 15, y - 15, pl->n, PlImg + da);
+		}
+		else if (aa == 1) {
+			DrawSWUImage(x - 15, y - 15, pl->n, Pls1Img + da);
+		}
+		else {
+			DrawSWUImage(x - 15, y - 15, pl->n, Pls2Img + da);
+		}
+	}
+}
 
 void VIEWPORT::Show(void)
 {
 	MakeBufferWindow(scr_x1, scr_y1, scr_x2, scr_y2);
 	if (NoFocusing) {
-		fogFilter->Refresh();
+		fogFilter->Refresh((float)plr[ActPlayer].a, (float)V_FOV, GameStep - plr[ActPlayer].lastDead);
 	}
 	else {
-		fogFilter->Refresh((float)plr[ActPlayer].a, (float)V_FOV);
+		fogFilter->Refresh((float)plr[ActPlayer].a, (float)V_FOV, 0);
 	}
 	dmgFilter->Refresh(plr[ActPlayer].damageLast);
 
@@ -181,7 +232,6 @@ void VIEWPORT::Show(void)
 		}
 	}
 
-    BYTE da;
     long i,ix,iy;
 	for (iy = y / 20 - 1; iy < (long)(y + scr_y2 - scr_y1) / 20 + 1; iy++) {
 		for (ix = x / 20 - 1; ix < (long)(x + scr_x2 - scr_x1) / 20 + 1; ix++) {
@@ -223,109 +273,34 @@ void VIEWPORT::Show(void)
 			}
 		}
 	}
-    Si16 xx,yy;
-    BYTE plrvis[M_PLR];
-	if (!NoFocusing) {
-		Si16 CodeCur = 0;
-		while (CodeCur != plrevn[ActPlayer].Length) {
-			if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEBLT) {
-				i = *((WORD *)(plrevn[ActPlayer].Code + CodeCur + 1));
-				if (blt[i].Handler == I_CorpseHandler) {
-					blt[i].Draw(blt[i].x - x + scr_x1, blt[i].y - y + scr_y1, &(blt[i]));
-				}
-			}
-			CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
+
+	// Draw bullets
+	ForEachVisibleBullet([](OBJECT* bl, int x, int y) {
+		if (bl->Handler == I_CorpseHandler) {
+			bl->Draw(x, y, bl);
 		}
-		CodeCur = 0;
-		while (CodeCur != plrevn[ActPlayer].Length) {
-			if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEBLT) {
-				i = *((WORD *)(plrevn[ActPlayer].Code + CodeCur + 1));
-				if (blt[i].Handler != I_CorpseHandler) {
-					blt[i].Draw(blt[i].x - x + scr_x1, blt[i].y - y + scr_y1, &(blt[i]));
-				}
-			}
-			CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
+	});
+	ForEachVisibleBullet([](OBJECT* bl, int x, int y) {
+		if (bl->Handler != I_CorpseHandler) {
+			bl->Draw(x, y, bl);
 		}
-		memset(plrvis, 0, M_PLR);
-		CodeCur = 0;
-		while (CodeCur != plrevn[ActPlayer].Length) {
-			if (plrevn[ActPlayer].Code[CodeCur] == PE_SEEPLR) {
-				i = plrevn[ActPlayer].Code[CodeCur + 1];
-				plrvis[i] = 1;
-				da = ((BYTE)((plr[i].a + M_PI / 16) * 8 / M_PI)) % 16;
-				xx = plr[i].x - x + scr_x1;
-				yy = plr[i].y - y + scr_y1;
-				if (plr[i].damgfrm) {
-					DrawSWUImage(xx - 15, yy - 15, i, PldImg + da);
-				}
-				else if (plr[i].firefrm) {
-					DrawSWUImage(xx - 15, yy - 15, i, PlfImg + da);
-				}
-				else {
-					BYTE aa = F_MovFrm[plr[i].movefrm / M_STEPLEN];
-					if (aa == 0) {
-						DrawSWUImage(xx - 15, yy - 15, i, PlImg + da);
-					}
-					else if (aa == 1) {
-						DrawSWUImage(xx - 15, yy - 15, i, Pls1Img + da);
-					}
-					else {
-						DrawSWUImage(xx - 15, yy - 15, i, Pls2Img + da);
-					}
-				}
-			}
-			CodeCur += PEventSize[plrevn[ActPlayer].Code[CodeCur]];
-		}
-		i = ActPlayer;
-		da = ((BYTE)((plr[i].a + M_PI / 16) * 8 / M_PI)) % 16;
-		xx = plr[i].x - x + scr_x1; 
-		yy = plr[i].y - y + scr_y1;
-		if (plr[i].damgfrm) {
-			DrawSWUImage(xx - 15, yy - 15, i, PldImg + da);
-		}
-		else if (plr[i].firefrm) {
-			DrawSWUImage(xx - 15, yy - 15, i, PlfImg + da);
-		}
-		else {
-			BYTE aa = F_MovFrm[plr[i].movefrm / M_STEPLEN];
-			if (aa == 0) {
-				DrawSWUImage(xx - 15, yy - 15, i, PlImg + da);
-			}
-			else if (aa == 1) {
-				DrawSWUImage(xx - 15, yy - 15, i, Pls1Img + da);
-			}
-			else {
-				DrawSWUImage(xx - 15, yy - 15, i, Pls2Img + da);
-			}
-		}
-	}
-    else {
-        for(Si16 i=0;i<BltExt;i++)
-            if(blt[i].Handler==I_CorpseHandler && blt[i].age)
-                blt[i].Draw(blt[i].x-x+scr_x1,blt[i].y-y+scr_y1,&(blt[i]));
-        for(Si16 i=0;i<BltExt;i++)
-            if(blt[i].age && blt[i].Handler!=I_CorpseHandler)
-                blt[i].Draw(blt[i].x-x+scr_x1,blt[i].y-y+scr_y1,&(blt[i]));
-        memset(plrvis,0,M_PLR);
-        for(Si16 i=0;i<Players;i++) {
-            if(plr[i].State<=0) continue;
-            plrvis[i]=1;
-            da=((BYTE)((plr[i].a+M_PI/16)*8/M_PI))%16;
-            xx=plr[i].x-x+scr_x1;yy=plr[i].y-y+scr_y1;
-            if(plr[i].damgfrm) DrawSWUImage(xx-15,yy-15,i,PldImg+da);
-            else if(plr[i].firefrm) DrawSWUImage(xx-15,yy-15,i,PlfImg+da);
-            else {
-                BYTE aa=F_MovFrm[plr[i].movefrm/M_STEPLEN];
-                if(aa==0) {DrawSWUImage(xx-15,yy-15,i,PlImg+da);continue;}
-                if(aa==1) {DrawSWUImage(xx-15,yy-15,i,Pls1Img+da);continue;}
-                DrawSWUImage(xx-15,yy-15,i,Pls2Img+da);
-            }
-        }
-    }
+	});
+
+	// Draw players
+	BYTE plrvis[M_PLR];
+	memset(plrvis, 0, M_PLR);
+	ForEachVisiblePlayer([plrvis=&plrvis[0]](PLAYER* pl, int x, int y) {
+		plrvis[pl->n] = 1;
+		DrawPlayer(pl, x, y);
+	});
+
+	// Draw active player
+	DrawPlayer(&plr[ActPlayer], ScreenX(plr[ActPlayer].x), ScreenY(plr[ActPlayer].y));
 
 	ApplyFilters(&filters);
 
 	// Bot Point for Debug
+	Si16 xx, yy;
 	if (showBotPoints) {
 		void ShowBotPoints(VIEWPORT* vp, bool showIds);
 		ShowBotPoints(this, showBotPoints == 2);
@@ -392,7 +367,7 @@ void VIEWPORT::Show(void)
     }
     SetTextJust(2,0);
     NoBufferWindow();
-    /* Draw Statistics */
+    // Draw Statistics
 	if (true || DrawStatistics) {
 		SetColor(0);
 		FrameRect(scr_x1 - 1, scr_y1 - 1, scr_x2 + 1, scr_y2 + 1);
@@ -401,6 +376,7 @@ void VIEWPORT::Show(void)
 			scr_y2 - plr[ActPlayer].hp*((double)(scr_y2 - scr_y1) / M_HEALTH),
 			scr_y2,
 			scr_x1 - 1);
+
 		if (plr[ActPlayer].ammo[plr[ActPlayer].actwpn]) {
 			SetColor(79);
 			HorzLine(scr_x1,
@@ -414,40 +390,45 @@ void VIEWPORT::Show(void)
 				scr_y2 + 1);
 		}
 	}
+
     DrawSImage(scr_x1+4,scr_y1+4,WpnImg+plr[ActPlayer].actwpn);
-    if(DrawWeapon[ActPlayer]) {
-        char tmpstr[16];
-        DrawWeapon[ActPlayer]--;
-        SetColor(127);
-        _itoa(plr[ActPlayer].ammo[plr[ActPlayer].actwpn],tmpstr,10);
-        OutText(scr_x1+49,scr_y1+10,tmpstr,&g_font);
-        DrawSImage(scr_x1+4,scr_y2-23,&HealthImg);
-        _itoa(plr[ActPlayer].hp,tmpstr,10);
-        OutText(scr_x1+49,scr_y2-17,tmpstr,&g_font);
-        if(plr[ActPlayer].armr) {
-            DrawSImage(scr_x1+4,scr_y2-48,&ArmourImg);
-            _itoa(plr[ActPlayer].armr,tmpstr,10);
-            OutText(scr_x1+49,scr_y2-42,tmpstr,&g_font);
-        }
-        /* Names & Frags */
-        if(DrawWeapon[ActPlayer]>=SHOW_WPN) {
-            DrawWeapon[ActPlayer]++;
-            for(Si16 i=0;i<Players && i<11;i++) if(plr[FragSort[i]].State) {
-                _itoa(plr[FragSort[i]].frag,tmpstr,10);
-                if(FragSort[i]==ActPlayer) SetColor(79);
-                else SetColor(127);
-                DrawSWUImage(scr_x2-45,18*i,FragSort[i],&FragImg);
-                OutText(scr_x2,scr_y1+5+18*i,tmpstr,&g_font);
-                OutText(scr_x2-50,scr_y1+5+18*i,plr[FragSort[i]].Name,&g_font);
-            }
-        }
-        else {
-            _itoa(plr[ActPlayer].frag,tmpstr,10);
-            SetColor(127);
-            DrawSWUImage(scr_x2-45,scr_y1+4,ActPlayer,&FragImg);
-            OutText(scr_x2,scr_y1+10,tmpstr,&g_font);
-        }
-    }
+
+	if (true) {
+		char tmpstr[16];
+		if (DrawWeapon[ActPlayer]) {
+			DrawWeapon[ActPlayer]--;
+		}
+		SetColor(127);
+		_itoa(plr[ActPlayer].ammo[plr[ActPlayer].actwpn], tmpstr, 10);
+		OutText(scr_x1 + 49, scr_y1 + 10, tmpstr, &g_font);
+		DrawSImage(scr_x1 + 4, scr_y2 - 23, &HealthImg);
+		_itoa(plr[ActPlayer].hp, tmpstr, 10);
+		OutText(scr_x1 + 49, scr_y2 - 17, tmpstr, &g_font);
+		if (plr[ActPlayer].armr) {
+			DrawSImage(scr_x1 + 4, scr_y2 - 48, &ArmourImg);
+			_itoa(plr[ActPlayer].armr, tmpstr, 10);
+			OutText(scr_x1 + 49, scr_y2 - 42, tmpstr, &g_font);
+		}
+
+		// Names & Frags
+		if (DrawWeapon[ActPlayer] >= SHOW_WPN) {
+			DrawWeapon[ActPlayer]++;
+			for (Si16 i = 0; i < Players && i < 11; i++) if (plr[FragSort[i]].State) {
+				_itoa(plr[FragSort[i]].frag, tmpstr, 10);
+				if (FragSort[i] == ActPlayer) SetColor(79);
+				else SetColor(127);
+				DrawSWUImage(scr_x2 - 45, 18 * i, FragSort[i], &FragImg);
+				OutText(scr_x2, scr_y1 + 5 + 18 * i, tmpstr, &g_font);
+				OutText(scr_x2 - 50, scr_y1 + 5 + 18 * i, plr[FragSort[i]].Name, &g_font);
+			}
+		}
+		else {
+			_itoa(plr[ActPlayer].frag, tmpstr, 10);
+			SetColor(127);
+			DrawSWUImage(scr_x2 - 45, scr_y1 + 4, ActPlayer, &FragImg);
+			OutText(scr_x2, scr_y1 + 10, tmpstr, &g_font);
+		}
+	}
 }
 
 void PLAYER :: ResetCmnd(void)
@@ -471,7 +452,9 @@ void Start(void)
     MapInit(MapNum);
     DrawWeapon[0]=SHOW_WPN; DrawWeapon[1]=SHOW_WPN;
     DrawWeapon[2]=SHOW_WPN; DrawWeapon[3]=SHOW_WPN;
-    GameTime=0; SecondCounter=0;
+	GameStep = 0;
+	GameTime=0;
+	SecondCounter=0;
     TryExit=0; NoMessages=0;
     CheckBltExt=1; BltExt=M_BLT; BltFst=0;
     EndGame=EG_NOEG;
@@ -712,6 +695,7 @@ void Start(void)
 
 void Kill(BYTE n,BYTE corpse,Si16 a,BYTE killer)
 {
+	plr[n].lastDead = GameStep;
     if(a) {  // Battle Kill //
         Si16 txtnum;
         if(killer==n) {
@@ -1548,6 +1532,15 @@ void EasyMain(void)
 				bot[i].Handler(bot+i);
 			}
 
+#ifdef Q2D_DEVMODE
+			if (KF(kKeyF1)) {
+				KeyDown(kKeyF1);
+				CheckFrag = 1;
+				plr[vp[0].ActPlayer].damage += plr[vp[0].ActPlayer].hp + plr[vp[0].ActPlayer].armr;
+				plr[vp[0].ActPlayer].damageown = vp[0].ActPlayer;
+			}
+#endif
+
             /* Communication & Exit & Win & Lose */
             //if(NetStatus) SendCmnd();
             //else
@@ -1701,6 +1694,7 @@ void EasyMain(void)
 			arctic::easy::Sleep(nextFrameTime - now);
 			currentTime = std::max(nextFrameTime, now);
 
+			GameStep++;
             SecondCounter++;
             if(SecondCounter>=N_NLPS) {
                 CheckBltExt=1;

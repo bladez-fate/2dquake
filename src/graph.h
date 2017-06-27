@@ -97,6 +97,7 @@ struct FogFilter {
 
 	// State
 	bool enabled = false;
+	int darkenAll = 0;
 	Ui16 fov_a1;
 	Ui16 fov_a2;
 
@@ -162,9 +163,10 @@ struct FogFilter {
 		enabled = false;
 	}
 
-	void Refresh(float a, float fov)
+	void Refresh(float a, float fov, int darken)
 	{
 		enabled = true;
+		darkenAll = darken;
 		float goodA = -a;
 		fov_a1 = Angle(goodA - fov);
 		fov_a2 = Angle(goodA + fov) + 1;
@@ -234,6 +236,7 @@ struct FogFilter {
 				int darkness = std::min(outOfFov, std::max(0, p.r - 8) * 16);
 				l = std::min(l, std::max(minLight, 256 - 4*darkness));
 			}
+			l = std::max(minLight, l - darkenAll);
 			return Mult(c, l);
 		}
 		return c;
