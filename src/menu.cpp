@@ -34,7 +34,7 @@ BYTE ShowScreenImage(char *FileName)
 void InputMenu(char *dst, char *msg, Si16 dstSize)
 {
 	while (true) {
-		ShowScreenImage("IMAGES\\MENU.RAW");
+		ShowScreenImage("images/MENU.RAW");
 		SetColor(MENU_COL3);
 		OutText(screen::cx + 2, screen::cy - 10 + 2, msg, &g_font); // was 162 92
 		SetColor(MENU_COL1);
@@ -99,7 +99,7 @@ void InputMenu(char *dst, char *msg, Si16 dstSize)
 void MessageMenu(const char *msg)
 {
 	while (true) {
-		ShowScreenImage("IMAGES\\MENU.RAW");
+		ShowScreenImage("images/MENU.RAW");
 		SetColor(MENU_COL3);
 		OutText(screen::cx + 2, screen::cy + 2, msg, &g_font);
 		SetColor(MENU_COL1);

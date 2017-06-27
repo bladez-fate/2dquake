@@ -546,7 +546,7 @@ void Start(void)
     /*if(NetStatus==1) {
         //// Connecting ... ////
         Si16 rd;
-        ShowScreenImage("IMAGES\\MENU.RAW");
+        ShowScreenImage("images/MENU.RAW");
         SetTextJust(1,1);
         SetColor(MENU_COL1);
         OutText(160,100,"C O N N E C T I N G . . .",&g_font);
@@ -621,7 +621,7 @@ void Start(void)
     if(NetStatus==2) {
         //// Connecting ... ////
         Si16 rd;
-        ShowScreenImage("IMAGES\\MENU.RAW");
+        ShowScreenImage("images/MENU.RAW");
         SetTextJust(1,1);
         SetColor(MENU_COL1);
         OutText(160,100,"C O N N E C T I N G . . .",&g_font);
@@ -1230,13 +1230,13 @@ BYTE MainMenu(void)
 {
     SetColor(0);ClearScreen();
     ShowScreen();
-    g_palette.Load("MENU.PAL");
+    g_palette.Load("system/menu.pal");
     g_palette.Set();
     SetTextJust(1,1);
     Si16 cur=0;
     while(1)
     {
-        ShowScreenImage("IMAGES\\MENU.RAW");
+        ShowScreenImage("images/menu.raw");
 		int txtx = screen::cx; // 160
 		int txty = screen::h * 3 / 4; // 152
 
@@ -1254,7 +1254,7 @@ BYTE MainMenu(void)
             case 2: HelpMenu(); a=1; break;
 			case 3: 
 				quake2d_editor::main();
-				g_palette.Load("MENU.PAL");
+				g_palette.Load("system/menu.pal");
 				g_palette.Set();
 				SetTextJust(1, 1);
 				break;
@@ -1268,7 +1268,7 @@ BYTE MainMenu(void)
     SetColor(0);
 	ClearScreen();
     ShowScreen();
-    g_palette.Load("2DQUAKE.PAL");
+    g_palette.Load("system/2dquake.pal");
     g_palette.Set();
     return cur;
 }
@@ -1279,7 +1279,7 @@ BYTE GameMenu(void)
     NextMap(MapNum);
     while(1)
     {
-        ShowScreenImage("IMAGES\\MENU.RAW");
+        ShowScreenImage("images/menu.raw");
 		for (Si16 i = 0; i < mnuGameAmount; i++) {
 			Si16 y = screen::cy - mnuGameAmount * 8 + i * 16;
 			Si16 x;
@@ -1354,10 +1354,10 @@ void CreditsMenu(void)
 {
     SetColor(0);ClearScreen();
     ShowScreen();
-    g_palette.Load("CREDITS.PAL");
+    g_palette.Load("system/credits.pal");
     g_palette.Set();
     SetTextJust(1,1);
-    ShowScreenImage("IMAGES\\CREDITS.RAW");
+    ShowScreenImage("images/credits.raw");
     ShowScreen();
 	for (int i = 120; i > 0; i--) {
 		ShowScreen();
@@ -1379,7 +1379,7 @@ void CreditsMenu(void)
 	}
     SetColor(0);ClearScreen();
     ShowScreen();
-    g_palette.Load("MENU.PAL");
+    g_palette.Load("system/menu.pal");
     g_palette.Set();
 }
 
@@ -1402,7 +1402,7 @@ void HelpMenu(void) // DEMO //
 void EasyMain(void)
 {
     /* Config Loading */
-    cfg.Load("2DQUAKE.CFG");
+    cfg.Load("system/2dquake.cfg");
 
     /* Default Startup Settings */
 	//NetStatus = 0;
@@ -1412,7 +1412,7 @@ void EasyMain(void)
     /* Loading & Connecting */
     Si16 error=0;
     if(!InitGraph()) {printf("Can't Initialize Graphics Mode 13H"); exit(1);}
-    error+=!LoadFont("STAND.SFN",&g_font);
+    error+=!LoadFont("system/stand.sfn",&g_font);
     //InitKeyHandler();
 
     while(1) {
@@ -1430,11 +1430,11 @@ void EasyMain(void)
 		memset(blt, 0, M_BLT * sizeof(OBJECT));
 		memset(plrevn, 0, M_PLR * sizeof(PLREVENT));
 
-        error+=!g_palette.Load("2DQUAKE.PAL");
-        error+=!g_palette.Load("MENU.PAL");
+        error+=!g_palette.Load("system/2dquake.pal");
+        error+=!g_palette.Load("system/menu.pal");
         if(!error) {
             g_palette.Set();
-            ShowScreenImage("IMAGES\\MENU.RAW");
+            ShowScreenImage("images/menu.raw");
             SetTextJust(1,1);
             SetColor(MENU_COL3);
 			OutText(screen::cx + 2, screen::cy + 2, "L O A D I N G . . .", &g_font);
@@ -1442,70 +1442,70 @@ void EasyMain(void)
 			OutText(screen::cx, screen::cy, "L O A D I N G . . .", &g_font);
             ShowScreen();
         }
-        error+=!LoadImage("IMAGES\\FRAG.RAW",&FragImg);
-        error+=!LoadImage("IMAGES\\HEALTH.RAW",&HealthImg);
-        error+=!LoadImage("IMAGES\\ARMOUR.RAW",&ArmourImg);
-        error+=!LoadImage("IMAGES\\AIM.RAW",&AimImg);
-        error+=!LoadImage("IMAGES\\BALL1.RAW",BallImg);
-        error+=!LoadImage("IMAGES\\BALL2.RAW",BallImg+1);
-        error+=!LoadImage("IMAGES\\BALL3.RAW",BallImg+2);
-        error+=!LoadImage("IMAGES\\BALL4.RAW",BallImg+3);
+        error+=!LoadImage("images/frag.raw",&FragImg);
+        error+=!LoadImage("images/health.raw",&HealthImg);
+        error+=!LoadImage("images/armour.raw",&ArmourImg);
+        error+=!LoadImage("images/aim.raw",&AimImg);
+        error+=!LoadImage("images/ball1.raw",BallImg);
+        error+=!LoadImage("images/ball2.raw",BallImg+1);
+        error+=!LoadImage("images/ball3.raw",BallImg+2);
+        error+=!LoadImage("images/ball4.raw",BallImg+3);
         for(Si16 i=0;i<M_MASK;i++) {
             char tmpstr[32];
-            sprintf(tmpstr,"IMAGES\\MASK%hd.RAW",i+1);
+            sprintf(tmpstr,"images/mask%hd.raw",i+1);
             error+=!LoadImage(tmpstr,MaskImg+i);
         }
         for(Si16 i=0;i<M_WPN;i++) {
             char tmpstr[32];
-            sprintf(tmpstr,"IMAGES\\WEAPON%hd.RAW",i);
+            sprintf(tmpstr,"images/weapon%hd.raw",i);
             error+=!LoadImage(tmpstr,WpnImg+i);
         }
         for(Si16 i=0;i<M_PLRFRM;i++) {
             char tmpstr[32];
-            sprintf(tmpstr,"IMAGES\\PLAYER%hd.RAW",i);
+            sprintf(tmpstr,"images/player%hd.raw",i);
             error+=!LoadImage(tmpstr,PlImg+i);
-            sprintf(tmpstr,"IMAGES\\PLAY1S%hd.RAW",i);
+            sprintf(tmpstr,"images/play1s%hd.raw",i);
             error+=!LoadImage(tmpstr,Pls1Img+i);
-            sprintf(tmpstr,"IMAGES\\PLAY2S%hd.RAW",i);
+            sprintf(tmpstr,"images/play2s%hd.raw",i);
             error+=!LoadImage(tmpstr,Pls2Img+i);
-            sprintf(tmpstr,"IMAGES\\PLAYF%hd.RAW",i);
+            sprintf(tmpstr,"images/playf%hd.raw",i);
             error+=!LoadImage(tmpstr,PlfImg+i);
-            sprintf(tmpstr,"IMAGES\\PLAYD%hd.RAW",i);
+            sprintf(tmpstr,"images/playd%hd.raw",i);
             error+=!LoadImage(tmpstr,PldImg+i);
         }
 
         error+=!InitializeMap(MapNum);
 
-        error+=!LoadImage("IMAGES\\HLTH.RAW",ItemImg);
-        error+=!LoadImage("IMAGES\\ARMR.RAW",ItemImg+1);
-        error+=!LoadImage("IMAGES\\PISTOLA.RAW",ItemImg+2);
-        error+=!LoadImage("IMAGES\\BOW.RAW",ItemImg+3);
-        error+=!LoadImage("IMAGES\\BOWA.RAW",ItemImg+4);
-        error+=!LoadImage("IMAGES\\AKM.RAW",ItemImg+5);
-        error+=!LoadImage("IMAGES\\AKMA.RAW",ItemImg+6);
-        error+=!LoadImage("IMAGES\\NAPALM.RAW",ItemImg+7);
-        error+=!LoadImage("IMAGES\\NAPALMA.RAW",ItemImg+8);
-        error+=!LoadImage("IMAGES\\LNCHER.RAW",ItemImg+9);
-        error+=!LoadImage("IMAGES\\LNCHERA.RAW",ItemImg+10);
-        error+=!LoadImage("IMAGES\\PHOTO.RAW",ItemImg+11);
-        error+=!LoadImage("IMAGES\\GRENADE.RAW",ItemImg+12);
-        error+=!LoadImage("IMAGES\\REDMER.RAW",ItemImg+13);
-        error+=!LoadImage("IMAGES\\LASER.RAW",ItemImg+14);
-        error+=!LoadImage("IMAGES\\LASERA.RAW",ItemImg+15);
-        error+=!LoadImage("IMAGES\\PACK.RAW",ItemImg+16);
+        error+=!LoadImage("images/hlth.raw",ItemImg);
+        error+=!LoadImage("images/armr.raw",ItemImg+1);
+        error+=!LoadImage("images/pistola.raw",ItemImg+2);
+        error+=!LoadImage("images/bow.raw",ItemImg+3);
+        error+=!LoadImage("images/bowa.raw",ItemImg+4);
+        error+=!LoadImage("images/akm.raw",ItemImg+5);
+        error+=!LoadImage("images/akma.raw",ItemImg+6);
+        error+=!LoadImage("images/napalm.raw",ItemImg+7);
+        error+=!LoadImage("images/napalma.raw",ItemImg+8);
+        error+=!LoadImage("images/lncher.raw",ItemImg+9);
+        error+=!LoadImage("images/lnchera.raw",ItemImg+10);
+        error+=!LoadImage("images/photo.raw",ItemImg+11);
+        error+=!LoadImage("images/grenade.raw",ItemImg+12);
+        error+=!LoadImage("images/redmer.raw",ItemImg+13);
+        error+=!LoadImage("images/laser.raw",ItemImg+14);
+        error+=!LoadImage("images/lasera.raw",ItemImg+15);
+        error+=!LoadImage("images/pack.raw",ItemImg+16);
 
         for(Si16 i=0;i<4;i++) {
             char tmpstr[32];
-            sprintf(tmpstr,"IMAGES\\GRFRM%hd.RAW",i);
+            sprintf(tmpstr,"images/grfrm%hd.raw",i);
             error+=!LoadImage(tmpstr,GrImg+i);
         }
         for(Si16 i=0;i<8;i++) {
             char tmpstr[32];
-            sprintf(tmpstr,"IMAGES\\RDFRM%hd.RAW",i);
+            sprintf(tmpstr,"images/rdfrm%hd.raw",i);
             error+=!LoadImage(tmpstr,RdImg+i);
-            sprintf(tmpstr,"IMAGES\\RKFRM%hd.RAW",i);
+            sprintf(tmpstr,"images/rkfrm%hd.raw",i);
             error+=!LoadImage(tmpstr,RkImg+i);
-            sprintf(tmpstr,"IMAGES\\CORPSE%hd.RAW",i);
+            sprintf(tmpstr,"images/corpse%hd.raw",i);
             error+=!LoadImage(tmpstr,CrpsImg+i);
         }
 
@@ -1517,7 +1517,7 @@ void EasyMain(void)
 
         SetColor(0);ClearScreen();
         ShowScreen();
-        g_palette.Load("2DQUAKE.PAL");
+        g_palette.Load("system/2dquake.pal");
         g_palette.Set();
         SetTextJust(2,0);
 

@@ -573,7 +573,7 @@ namespace quake2d_editor {
 			FreeImage(RdImg + i);
 			FreeImage(RkImg + i);
 		}
-		g_palette.Load("MENU.PAL");
+		g_palette.Load("system/menu.pal");
 		g_palette.Set();
 		if (!exitMessage.empty()) {
 			MessageMenu(exitMessage.c_str());
@@ -612,8 +612,7 @@ namespace quake2d_editor {
 		if (!InitGraph()) { printf("Can't Initialize Graphics Mode 13H"); exit(1); }
 
 		Si16 error = 0;
-		error += !LoadFont("STAND.SFN", &g_font);
-		error += !g_palette.Load("2DQUAKE.PAL");
+		error += !g_palette.Load("system/2dquake.pal");
 		if (!error) {
 			g_palette.Set();
 			SetTextJust(1, 1);
@@ -621,51 +620,51 @@ namespace quake2d_editor {
 			OutText(160, 100, "‡   £ à ã § ª   . . .", &g_font);
 			ShowScreen();
 		}
-		error += !LoadImage("IMAGES\\FRAG.RAW", &FragImg);
-		error += !LoadImage("IMAGES\\HEALTH.RAW", &HealthImg);
-		error += !LoadImage("IMAGES\\ARMOUR.RAW", &ArmourImg);
+		error += !LoadImage("images/frag.raw", &FragImg);
+		error += !LoadImage("images/health.raw", &HealthImg);
+		error += !LoadImage("images/armour.raw", &ArmourImg);
 		for (Si16 i = 0; i < M_MASK; i++) {
 			char tmpstr[32];
-			sprintf(tmpstr, "IMAGES\\MASK%hd.RAW", i + 1);
+			sprintf(tmpstr, "images/mask%hd.raw", i + 1);
 			error += !LoadImage(tmpstr, MaskImg + i);
 		}
 
 		for (Si16 i = 0; i < 4; i++) {
 			char tmpstr[32];
-			sprintf(tmpstr, "IMAGES\\GRFRM%hd.RAW", i);
+			sprintf(tmpstr, "images/grfrm%hd.raw", i);
 			error += !LoadImage(tmpstr, GrImg + i);
 		}
 		for (Si16 i = 0; i < 8; i++) {
 			char tmpstr[32];
-			sprintf(tmpstr, "IMAGES\\RDFRM%hd.RAW", i);
+			sprintf(tmpstr, "images/rdfrm%hd.raw", i);
 			error += !LoadImage(tmpstr, RdImg + i);
-			sprintf(tmpstr, "IMAGES\\RKFRM%hd.RAW", i);
+			sprintf(tmpstr, "images/rkfrm%hd.raw", i);
 			error += !LoadImage(tmpstr, RkImg + i);
-			sprintf(tmpstr, "IMAGES\\CORPSE%hd.RAW", i);
+			sprintf(tmpstr, "images/corpse%hd.raw", i);
 			error += !LoadImage(tmpstr, CrpsImg + i);
 		}
 
 		for (Si16 i = 0; i < 8; i++) {
 			char tmpstr[32];
-			sprintf(tmpstr, "IMAGES\\PLAYER%hd.RAW", i * 2);
+			sprintf(tmpstr, "images/player%hd.raw", i * 2);
 			error += !LoadImage(tmpstr, ItemImg + i);
 		}
-		error += !LoadImage("IMAGES\\HLTH.RAW", ItemImg + 9);
-		error += !LoadImage("IMAGES\\ARMR.RAW", ItemImg + 8);
-		error += !LoadImage("IMAGES\\PISTOLA.RAW", ItemImg + 18);
-		error += !LoadImage("IMAGES\\BOW.RAW", ItemImg + 10);
-		error += !LoadImage("IMAGES\\BOWA.RAW", ItemImg + 19);
-		error += !LoadImage("IMAGES\\AKM.RAW", ItemImg + 11);
-		error += !LoadImage("IMAGES\\AKMA.RAW", ItemImg + 20);
-		error += !LoadImage("IMAGES\\NAPALM.RAW", ItemImg + 12);
-		error += !LoadImage("IMAGES\\NAPALMA.RAW", ItemImg + 21);
-		error += !LoadImage("IMAGES\\LNCHER.RAW", ItemImg + 13);
-		error += !LoadImage("IMAGES\\LNCHERA.RAW", ItemImg + 22);
-		error += !LoadImage("IMAGES\\PHOTO.RAW", ItemImg + 16);
-		error += !LoadImage("IMAGES\\GRENADE.RAW", ItemImg + 17);
-		error += !LoadImage("IMAGES\\REDMER.RAW", ItemImg + 15);
-		error += !LoadImage("IMAGES\\LASER.RAW", ItemImg + 14);
-		error += !LoadImage("IMAGES\\LASERA.RAW", ItemImg + 23);
+		error += !LoadImage("images/hlth.raw", ItemImg + 9);
+		error += !LoadImage("images/armr.raw", ItemImg + 8);
+		error += !LoadImage("images/pistola.raw", ItemImg + 18);
+		error += !LoadImage("images/bow.raw", ItemImg + 10);
+		error += !LoadImage("images/bowa.raw", ItemImg + 19);
+		error += !LoadImage("images/akm.raw", ItemImg + 11);
+		error += !LoadImage("images/akma.raw", ItemImg + 20);
+		error += !LoadImage("images/napalm.raw", ItemImg + 12);
+		error += !LoadImage("images/napalma.raw", ItemImg + 21);
+		error += !LoadImage("images/lncher.raw", ItemImg + 13);
+		error += !LoadImage("images/lnchera.raw", ItemImg + 22);
+		error += !LoadImage("images/photo.raw", ItemImg + 16);
+		error += !LoadImage("images/grenade.raw", ItemImg + 17);
+		error += !LoadImage("images/redmer.raw", ItemImg + 15);
+		error += !LoadImage("images/laser.raw", ItemImg + 14);
+		error += !LoadImage("images/lasera.raw", ItemImg + 23);
 
 		if (error) {
 			exitMessage = "Disk Loading or Memory Error(s)";
