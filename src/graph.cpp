@@ -26,28 +26,6 @@ tPALETTE g_palette;
 Rgba g_paletteData[256];
 Rgba* g_backBuffer = nullptr;
 
-//static FilterList* g_activeFilters = nullptr;
-
-//void EnableFilters(FilterList* filters)
-//{
-//	g_activeFilters = filters;
-//}
-//
-//void DisableFilters()
-//{
-//	g_activeFilters = nullptr;
-//}
-
-//inline Rgba FltCol(size_t pos, Rgba c)
-//{
-//	if (g_activeFilters) {
-//		return g_activeFilters->Apply(pos, c);
-//	}
-//	else {
-//		return c;
-//	}
-//}
-
 void SetColor(BYTE a)
 {
 	g_color = a;
