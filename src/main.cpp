@@ -1399,7 +1399,7 @@ void HelpMenu(void) // DEMO //
 /************/
 /*** MAIN ***/
 /************/
-void QuakeMain(void)
+void EasyMain(void)
 {
     /* Config Loading */
     cfg.Load("2DQUAKE.CFG");

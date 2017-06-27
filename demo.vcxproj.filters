@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="System Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -17,9 +13,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="resource.h">
       <Filter>System Files</Filter>
     </ClInclude>
@@ -27,9 +20,6 @@
       <Filter>System Files</Filter>
     </ClInclude>
     <ClInclude Include="src\2dqdefs.h">
-      <Filter>2dquake</Filter>
-    </ClInclude>
-    <ClInclude Include="src\arctic.h">
       <Filter>2dquake</Filter>
     </ClInclude>
     <ClInclude Include="src\defs.h">
@@ -139,22 +129,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="demo.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="app_icon.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="small_app_icon.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\arctic.cpp">
-      <Filter>2dquake</Filter>
-    </ClCompile>
     <ClCompile Include="src\bots.cpp">
       <Filter>2dquake</Filter>
     </ClCompile>

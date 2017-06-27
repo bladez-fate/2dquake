@@ -170,9 +170,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\arctic\engine\arctic_input.h" />
     <ClInclude Include="..\arctic\engine\arctic_math.h" />
     <ClInclude Include="..\arctic\engine\arctic_platform.h" />
@@ -203,7 +200,6 @@
     <ClInclude Include="..\arctic\engine\vec4si32.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\2dqdefs.h" />
-    <ClInclude Include="src\arctic.h" />
     <ClInclude Include="src\defs.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\graph.h" />
@@ -212,13 +208,6 @@
     <ClInclude Include="src\menu.h" />
     <ClInclude Include="src\textmode.h" />
     <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="demo.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="app_icon.ico" />
-    <Image Include="small_app_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\arctic\engine\arctic_input.cpp" />
@@ -231,7 +220,6 @@
     <ClCompile Include="..\arctic\engine\easy_sprite.cpp" />
     <ClCompile Include="..\arctic\engine\easy_sprite_instance.cpp" />
     <ClCompile Include="..\arctic\engine\engine.cpp" />
-    <ClCompile Include="src\arctic.cpp" />
     <ClCompile Include="src\bots.cpp" />
     <ClCompile Include="src\bullets.cpp" />
     <ClCompile Include="src\game.cpp" />
