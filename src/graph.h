@@ -327,8 +327,6 @@ struct FilterList {
 	}
 };
 
-//void EnableFilters(FilterList* filters);
-//void DisableFilters();
 void ApplyFilters(FilterList* filters);
 
 inline void ToPalAll(tPALETTE &Dst, tPALETTE &Src);
