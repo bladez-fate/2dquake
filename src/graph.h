@@ -15,8 +15,8 @@ using namespace arctic;
 using namespace arctic::easy;
 
 namespace screen {
-	constexpr int w = 640; // 320 * 3 / 2;
-	constexpr int h = 400; // 200 * 3 / 2;
+	constexpr int w = 640;
+	constexpr int h = 400;
 	constexpr int size = w*h;
 
 	constexpr int cx = w / 2;
@@ -71,8 +71,8 @@ struct FogFilter {
 	// Config
 	static constexpr Ui16 angSize = 1024;
 	static constexpr float angDelta = 2.0f * float(M_PI) / angSize;
-	static constexpr int maxSightDistance = 180;
-	static constexpr int clearSightDistance = 90;
+	static constexpr int maxSightDistance = 200;
+	static constexpr int clearSightDistance = 140;
 	static constexpr int minSightDistance = 7;
 	static constexpr int minLight = 64;
 	static constexpr int maxLight = 256;
