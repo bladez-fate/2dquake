@@ -117,14 +117,16 @@ void PalCopy(tPALETTE &Dst, tPALETTE &Src)
 	memcpy(Dst.Bits, Src.Bits, 768);
 }
 
-void ApplyFilters(FilterList* filters)
+void ApplyFilters(FilterList* filters, int x1, int y1, int x2, int y2)
 {
-	Rgba* bb = g_backBuffer;
-	Rgba* bbe = g_backBuffer + screen::size;
-
-	size_t pos = 0;
-	for (; bb != bbe; bb++, pos++) {
-		*bb = filters->Apply(pos, *bb);
+	size_t pos = screen::pixel(x1, y1);
+	Rgba* bb = g_backBuffer + pos;
+	size_t dx = x2 - x1 + 1;
+	size_t dy = screen::w - dx;
+	for (int y = y1; y <= y2; y++, bb += dy, pos += dy) {
+		for (Rgba* bbe = bb + dx; bb != bbe; bb++, pos++) {
+			*bb = filters->Apply(pos, *bb);
+		}
 	}
 }
 

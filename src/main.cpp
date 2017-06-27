@@ -297,7 +297,7 @@ void VIEWPORT::Show(void)
 	// Draw active player
 	DrawPlayer(&plr[ActPlayer], ScreenX(plr[ActPlayer].x), ScreenY(plr[ActPlayer].y));
 
-	ApplyFilters(&filters);
+	ApplyFilters(&filters, scr_x1, scr_y1, scr_x2, scr_y2);
 
 	// Bot Point for Debug
 	Si16 xx, yy;

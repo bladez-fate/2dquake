@@ -327,7 +327,7 @@ struct FilterList {
 	}
 };
 
-void ApplyFilters(FilterList* filters);
+void ApplyFilters(FilterList* filters, int x1, int y1, int x2, int y2);
 
 inline void ToPalAll(tPALETTE &Dst, tPALETTE &Src);
 inline void PalCopy(tPALETTE &Dst, tPALETTE &Src);
