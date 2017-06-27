@@ -6,6 +6,7 @@ Copyleft by bladez-fate
 10 July 2002 - 4 Jan 2003
 */
 
+#include <functional>
 #include "graph.h"
 
 /* Command Defines */
@@ -171,7 +172,7 @@ Copyleft by bladez-fate
 #define M_MASK    31
 #define M_PLRFRM  16
 #define V_SZ      12
-#define V_SZ2     250
+#define V_SZ2     200
 #define V_FOV     (M_PI/2)
 #define P_SZ      5
 #define F_LEN     8
@@ -348,8 +349,13 @@ struct VIEWPORT
 
 	VIEWPORT();
 	void Init(Si16 _scr_x1, Si16 _scr_y1, Si16 _scr_x2, Si16 _scr_y2);
+
+	void ForEachVisibleBullet(std::function<void(OBJECT*)> func);
+	void ForEachPlayer(std::function<void(OBJECT*)> func);
+
 	void ShowPoints(void);
     void Show(void);
+
     void MakeMessage(char *,Si16 Important=0);
     void ClearMessages(void);
 
