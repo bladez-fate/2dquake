@@ -193,7 +193,7 @@ void VIEWPORT::Show(void)
 {
 	MakeBufferWindow(scr_x1, scr_y1, scr_x2, scr_y2);
 	if (NoFocusing) {
-		fogFilter->Refresh((float)plr[ActPlayer].a, (float)V_FOV, GameStep - plr[ActPlayer].lastDead);
+		fogFilter->Refresh((float)plr[ActPlayer].deathAngle, (float)V_FOV, GameStep - plr[ActPlayer].lastDead);
 	}
 	else {
 		fogFilter->Refresh((float)plr[ActPlayer].a, (float)V_FOV, 0);
@@ -696,6 +696,7 @@ void Start(void)
 void Kill(BYTE n,BYTE corpse,Si16 a,BYTE killer)
 {
 	plr[n].lastDead = GameStep;
+	plr[n].deathAngle = plr[n].a;
     if(a) {  // Battle Kill //
         Si16 txtnum;
         if(killer==n) {

@@ -299,6 +299,7 @@ struct PLAYER
     Si16   frag;           // Amount of Frags
     Si16   reload;         // Reload Time Left (0 - Can Fire   >0 - Can't Fire)
 	long   lastDead = 0;   // Game time of last death
+	double deathAngle = 0; // Value of `a' at last death
 
     BYTE   n;              // Player Index in Primary Array
 
