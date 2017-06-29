@@ -44,8 +44,8 @@ Copyleft by bladez-fate
 #define D_SHELL   15  // Damage //
 #define R_SHELL   30  // Reload After Fire It //
 #define A_SHELL   90  // Life Time //
-#define S_SHELL   2   // Bullet Speed / --- / *C_SHELL //
-#define C_SHELL   8   // Speed Multiplier //
+#define S_SHELL   4   // Bullet Speed / --- / *Filter //
+#define C_SHELL   10   // Speed Multiplier //
 
 #define B_ARROW   1
 #define BA_ARROW  15

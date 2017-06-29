@@ -880,8 +880,12 @@ void B_BloodDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
     SetColor(72+bl->age%6); WinBufPixel(x-2+random(5),y-2+random(5));
 }
 
-void B_ShellDraw(Si16,Si16,void *,VIEWPORT*)
+void B_ShellDraw(Si16 x, Si16 y, void *b, VIEWPORT* v)
 {
+	int len = std::min<int>(C_SHELL, bl->age);
+	int x0 = x - len*bl->sx;
+	int y0 = y - len*bl->sy;
+	v->linFilter->TraceLight(x0, y0, x, y, 2, Rgba(255, 255, 50, 0), Rgba(255, 255, 50, 100));
 }
 
 void B_GilzaDraw(Si16 x,Si16 y,void *b, VIEWPORT*)

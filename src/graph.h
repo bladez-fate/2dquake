@@ -87,6 +87,17 @@ inline Rgba RgbSum(Rgba x, Rgba y)
 	);
 }
 
+inline Rgba RgbaSum(Rgba x, Rgba y)
+{
+	// TODO: is there any hardware summation with saturation?
+	return Rgba(
+		Ui16(x.r) + Ui16(y.r) > 255 ? 255 : x.r + y.r,
+		Ui16(x.g) + Ui16(y.g) > 255 ? 255 : x.g + y.g,
+		Ui16(x.b) + Ui16(y.b) > 255 ? 255 : x.b + y.b,
+		Ui16(x.a) + Ui16(y.a) > 255 ? 255 : x.a + y.a
+	);
+}
+
 struct FogFilter {
 	// Config
 	static constexpr Ui16 angSize = 1024;
@@ -305,6 +316,57 @@ struct LinFilter {
 		std::sort(pxl.begin(), pxl.end());
 	}
 
+	Rgba GradientColor(Rgba c1, Rgba c2, int count, int total)
+	{
+		if (total == 0) {
+			return c2;
+		}
+		else {
+			Ui32 m2 = count * 256 / total;
+			Ui32 m1 = 256 - m2;
+			Rgba v1 = RgbaMult(c1, m1);
+			Rgba v2 = RgbaMult(c2, m2);
+			return RgbaSum(v1, v2);
+		}
+	}
+
+	void TraceLight(int x1, int y1, int x2, int y2, int /*width*/, Rgba c1, Rgba c2)
+	{
+		Si16 x, y;
+		x = x2 - x1;
+		y = y2 - y1;
+		Si16 sx = sgn(x);
+		Si16 sy = sgn(y);
+		Si16 dx = abs(x);
+		Si16 dy = abs(y);
+
+		x = x1; y = y1;
+
+		Si16 count = 0;
+		if (dx >= dy)
+		{
+			Si16 bound = (dx + 1) >> 1;
+			for (Si16 i = 0; i <= dx; i++)
+			{
+				ClipBlendPixel(x, y, GradientColor(c1, c2, i, dx));
+				count += dy;
+				if (count >= bound) { y += sy; count -= dx; }
+				x += sx;
+			}
+		}
+		else
+		{
+			Si16 bound = (dy + 1) >> 1;
+			for (Si16 i = 0; i <= dy; i++)
+			{
+				ClipBlendPixel(x, y, GradientColor(c1, c2, i, dy));
+				count += dx;
+				if (count >= bound) { x += sx; count -= dy; }
+				y += sy;
+			}
+		}
+	}
+
 	void SpotLight(int x, int y, int r, Rgba c)
 	{
 		int r16 = r << 4;
@@ -322,9 +384,21 @@ struct LinFilter {
 			}
 			int x0 = x + p.x;
 			int y0 = y + p.y;
-			if (x0 >= x1 && y0 >= y1 && x0 <= x2 && y0 <= y2) {
-				BlendPixel(pos + p.pos_delta, c0);
-			}
+			ClipBlendPixel(x0, y0, pos + p.pos_delta, c0);
+		}
+	}
+
+	void ClipBlendPixel(int x, int y, Rgba c)
+	{
+		if (x >= x1 && y >= y1 && x <= x2 && y <= y2) {
+			BlendPixel(screen::pixel(x, y), c);
+		}
+	}
+
+	void ClipBlendPixel(int x, int y, size_t pos, Rgba c)
+	{
+		if (x >= x1 && y >= y1 && x <= x2 && y <= y2) {
+			BlendPixel(pos, c);
 		}
 	}
 
@@ -346,7 +420,7 @@ struct LinFilter {
 			Ui32 da = d.a;
 			Ui32 k = ca * 256 / (ca + da);
 			Rgba v1 = RgbaMult(c, k);
-			Rgba v2 = RgbaMult(d, 255 - k);
+			Rgba v2 = RgbaMult(d, 256 - k);
 			d = RgbSum(v1, v2);
 			d.a = 255 - ((255 - ca)*(255 - da) >> 8);
 		}
@@ -452,8 +526,8 @@ struct FilterList {
 
 	Rgba Apply(size_t pos, Rgba c) const
 	{
-		c = fog_->Apply(pos, c);
 		c = lin_->Apply(pos, c);
+		c = fog_->Apply(pos, c);
 		c = dmg_->Apply(pos, c);
 		return c;
 	}
