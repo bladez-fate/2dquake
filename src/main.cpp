@@ -98,9 +98,12 @@ void VIEWPORT::Init(Si16 _scr_x1, Si16 _scr_y1, Si16 _scr_x2, Si16 _scr_y2)
 	scr_y2 = _scr_y2;
 	fogFilter.reset(new FogFilter(
 		scr_x1, scr_y1, scr_x2, scr_y2, ScreenCenter().x, ScreenCenter().y));
+	linFilter.reset(new LinFilter(
+		scr_x1, scr_y1, scr_x2, scr_y2));
 	dmgFilter.reset(new DmgFilter(
 		scr_x1, scr_y1, scr_x2, scr_y2));
 	filters.fog_ = fogFilter.get();
+	filters.lin_ = linFilter.get();
 	filters.dmg_ = dmgFilter.get();
 }
 
@@ -198,9 +201,8 @@ void VIEWPORT::Show(void)
 	else {
 		fogFilter->Refresh((float)plr[ActPlayer].a, (float)V_FOV, 0);
 	}
+	linFilter->Refresh();
 	dmgFilter->Refresh(plr[ActPlayer].damageLast);
-
-	//EnableFilters(&filters);
 
 	constexpr BYTE defaultTile = 1;
 
@@ -275,14 +277,14 @@ void VIEWPORT::Show(void)
 	}
 
 	// Draw bullets
-	ForEachVisibleBullet([](OBJECT* bl, int x, int y) {
+	ForEachVisibleBullet([=](OBJECT* bl, int x, int y) {
 		if (bl->Handler == I_CorpseHandler) {
-			bl->Draw(x, y, bl);
+			bl->Draw(x, y, bl, this);
 		}
 	});
-	ForEachVisibleBullet([](OBJECT* bl, int x, int y) {
+	ForEachVisibleBullet([=](OBJECT* bl, int x, int y) {
 		if (bl->Handler != I_CorpseHandler) {
-			bl->Draw(x, y, bl);
+			bl->Draw(x, y, bl, this);
 		}
 	});
 
@@ -477,13 +479,11 @@ void Start(void)
     if(PlayersIn==1) {
 		vp[0].Init(1, 1, screen::w - 2, screen::h - 2);
         vp[0].x=0; vp[0].y=0;
-		//vp[0].scr_x1=1; vp[0].scr_y1=1;
-        //vp[0].scr_x2=318; vp[0].scr_y2=198;
+		vp[0].NoFocusing = 0;
 		vp[1].Init(0, 0, 0, 0);
 		vp[1].x=0; vp[1].y=0;
-		//vp[1].scr_x1=0; vp[1].scr_y1=0;
-        //vp[1].scr_x2=0; vp[1].scr_y2=0;
-        //if(NetStatus==0)
+		vp[1].NoFocusing = 0;
+		//if(NetStatus==0)
 		{
             Control1=0;plr[0].Control=PC_KEY1;
             Control2=-1;

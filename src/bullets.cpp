@@ -860,43 +860,43 @@ void B_BallHandler(void *b)
 /****   DRAW BLTs   ****/
 /***********************/
 
-void B_SmokeDraw(Si16 x,Si16 y,void *b)
+void B_SmokeDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
     if(bl->age<5)SetColor(112-bl->age);
     else SetColor(83-(bl->age)%16);
     WinBufPixel(x,y);
 }
 
-void B_Smoke2Draw(Si16 x,Si16 y,void *)
+void B_Smoke2Draw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
     SetColor(10+random(4));
     WinBufPixel(x,y);
 }
 
-void B_BloodDraw(Si16 x,Si16 y,void *b)
+void B_BloodDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
     SetColor(72+bl->age%6); WinBufPixel(x,y);
     SetColor(72+bl->age%6); WinBufPixel(x-2+random(5),y-2+random(5));
     SetColor(72+bl->age%6); WinBufPixel(x-2+random(5),y-2+random(5));
 }
 
-void B_ShellDraw(Si16,Si16,void *)
+void B_ShellDraw(Si16,Si16,void *,VIEWPORT*)
 {
 }
 
-void B_GilzaDraw(Si16 x,Si16 y,void *b)
+void B_GilzaDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
 	SetColor(148+bl->age%6);
 	WinBufPixel(x,y);
 }
 
-void B_ArrowDraw(Si16 x,Si16 y,void *b)
+void B_ArrowDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
 	SetColor(177); 
 	Line(x-bl->sx,y-bl->sy,x+bl->sx,y+bl->sy);
 }
 
-void B_NapalmDraw(Si16 x,Si16 y,void *b)
+void B_NapalmDraw(Si16 x,Si16 y,void *b, VIEWPORT* v)
 {
     SetColor(111); WinBufPixel(x,y);
     SetColor(79-(bl->age   )%16); WinBufPixel(x+1,y);
@@ -907,8 +907,9 @@ void B_NapalmDraw(Si16 x,Si16 y,void *b)
     SetColor(79-(bl->age+ 4)%16); WinBufPixel(x-bl->sx*2,y-bl->sy*2);
     SetColor(79-(bl->age+ 8)%16); WinBufPixel(x-bl->sx*3,y-bl->sy*3);
     SetColor(79-(bl->age+12)%16); WinBufPixel(x-bl->sx*4,y-bl->sy*4);
+	v->linFilter->SpotLight(x, y, 10, Rgba(255, 0, 0, 100));
 }
-void B_RocketDraw(Si16 x,Si16 y,void *b)
+void B_RocketDraw(Si16 x,Si16 y,void *b, VIEWPORT* v)
 {
     double angle;
     if((Si16)bl->sx==0) {
@@ -919,9 +920,10 @@ void B_RocketDraw(Si16 x,Si16 y,void *b)
     if(angle<0) angle+=2*M_PI;
     BYTE da=((BYTE)((angle+M_PI/8)*4/M_PI))%8;
     DrawSWUImage(x-4,y-4,bl->own,RkImg+da);
+	v->linFilter->SpotLight(x - bl->sx, y - bl->sy, 15, Rgba(255, 255, 200, 100));
 }
 
-void B_PhotoHorzDraw(Si16 x,Si16 y,void *b)
+void B_PhotoHorzDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
     SetColor(10); WinBufPixel(x,y-1);
     if(bl->age<NA_PHOTO) {SetColor(56); WinBufPixel(x,y);}
@@ -929,7 +931,7 @@ void B_PhotoHorzDraw(Si16 x,Si16 y,void *b)
     SetColor(10); WinBufPixel(x,y+1);
 }
 
-void B_PhotoVertDraw(Si16 x,Si16 y,void *b)
+void B_PhotoVertDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
     SetColor(10); WinBufPixel(x-1,y);
     if(bl->age<NA_PHOTO) {SetColor(56); WinBufPixel(x,y);}
@@ -937,7 +939,7 @@ void B_PhotoVertDraw(Si16 x,Si16 y,void *b)
     SetColor(10); WinBufPixel(x+1,y);
 }
 
-void B_GrenadeDraw(Si16 x,Si16 y,void *b)
+void B_GrenadeDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
     if(Si16(bl->sx*100) || Si16(bl->sy*100))
         DrawSWImage(x-2,y-2,GrImg+(bl->age/7)%4);
@@ -945,7 +947,7 @@ void B_GrenadeDraw(Si16 x,Si16 y,void *b)
         DrawSWImage(x-2,y-2,GrImg);
 }
 
-void B_RedmerDraw(Si16 x,Si16 y,void *b)
+void B_RedmerDraw(Si16 x,Si16 y,void *b, VIEWPORT* v)
 {
     double angle;
     if(Si16(bl->sx*100)==0) {
@@ -956,9 +958,10 @@ void B_RedmerDraw(Si16 x,Si16 y,void *b)
     if(angle<0) angle+=2*M_PI;
     BYTE da=((BYTE)((angle+M_PI/8)*4/M_PI))%8;
     DrawSWUImage(x-6,y-6,bl->own,RdImg+da);
+	v->linFilter->SpotLight(x - bl->sx, y - bl->sy, 20, Rgba(255, 255, 220, 120));
 }
 
-void B_LaserDraw(Si16 x,Si16 y,void *b)
+void B_LaserDraw(Si16 x,Si16 y,void *b, VIEWPORT* v)
 {
     SetColor(105);
     for(Si16 i=0;i<10;i++) {
@@ -967,14 +970,15 @@ void B_LaserDraw(Si16 x,Si16 y,void *b)
     }
     SetColor(104+(bl->age*7)/(MD_LASER));
     WinBufPixel(x,y);
+	v->linFilter->SpotLight(x, y, 12, Rgba(255, 255, 0, std::min(200, 20 + bl->age / 2)));
 }
 
-void B_AimDraw(Si16 x,Si16 y,void *)
+void B_AimDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-6,y-6,&AimImg);
 }
 
-void B_BallDraw(Si16 x,Si16 y,void *b)
+void B_BallDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
     DrawSWImage(x-10,y-10,BallImg+((bl->age/BALL_FRM_CHANGE)%4));
 }

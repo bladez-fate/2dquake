@@ -598,92 +598,92 @@ void I_PackHandler(void *b)
     bl->x+=pk->sx;bl->y+=bl->sy;
 }
 
-void I_HealthDraw(Si16 x,Si16 y,void *)
+void I_HealthDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[0].Width/2,y-ItemImg[0].Height/2,ItemImg);
 }
 
-void I_ArmourDraw(Si16 x,Si16 y,void *b)
+void I_ArmourDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[1].Width/2,y-ItemImg[1].Height/2,ItemImg+1);
 }
 
-void I_PistolAmmoDraw(Si16 x,Si16 y,void *)
+void I_PistolAmmoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[2].Width/2,y-ItemImg[2].Height/2,ItemImg+2);
 }
 
-void I_BowDraw(Si16 x,Si16 y,void *)
+void I_BowDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[3].Width/2,y-ItemImg[3].Height/2,ItemImg+3);
 }
 
-void I_BowAmmoDraw(Si16 x,Si16 y,void *)
+void I_BowAmmoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[4].Width/2,y-ItemImg[4].Height/2,ItemImg+4);
 }
 
-void I_AkmDraw(Si16 x,Si16 y,void *)
+void I_AkmDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[5].Width/2,y-ItemImg[5].Height/2,ItemImg+5);
 }
 
-void I_AkmAmmoDraw(Si16 x,Si16 y,void *)
+void I_AkmAmmoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[6].Width/2,y-ItemImg[6].Height/2,ItemImg+6);
 }
 
-void I_NapalmDraw(Si16 x,Si16 y,void *)
+void I_NapalmDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[7].Width/2,y-ItemImg[7].Height/2,ItemImg+7);
 }
 
-void I_NapalmAmmoDraw(Si16 x,Si16 y,void *)
+void I_NapalmAmmoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[8].Width/2,y-ItemImg[8].Height/2,ItemImg+8);
 }
 
-void I_LauncherDraw(Si16 x,Si16 y,void *)
+void I_LauncherDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[9].Width/2,y-ItemImg[9].Height/2,ItemImg+9);
 }
 
-void I_LauncherAmmoDraw(Si16 x,Si16 y,void *)
+void I_LauncherAmmoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[10].Width/2,y-ItemImg[10].Height/2,ItemImg+10);
 }
 
-void I_PhotoDraw(Si16 x,Si16 y,void *)
+void I_PhotoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[11].Width/2,y-ItemImg[11].Height/2,ItemImg+11);
 }
 
-void I_GrenadeDraw(Si16 x,Si16 y,void *)
+void I_GrenadeDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[12].Width/2,y-ItemImg[12].Height/2,ItemImg+12);
 }
 
-void I_RedmerDraw(Si16 x,Si16 y,void *)
+void I_RedmerDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[13].Width/2,y-ItemImg[13].Height/2,ItemImg+13);
 }
 
-void I_LaserDraw(Si16 x,Si16 y,void *)
+void I_LaserDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[14].Width/2,y-ItemImg[14].Height/2,ItemImg+14);
 }
 
-void I_LaserAmmoDraw(Si16 x,Si16 y,void *)
+void I_LaserAmmoDraw(Si16 x,Si16 y,void *, VIEWPORT*)
 {
 	DrawSWImage(x-ItemImg[15].Width/2,y-ItemImg[15].Height/2,ItemImg+15);
 }
 
-void I_CorpseDraw(Si16 x,Si16 y,void *b)
+void I_CorpseDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
 	DrawSWUImage(x-CrpsImg[(bl->age-1)%8].Width/2,y-CrpsImg[(bl->age-1)%8].Height/2,bl->own,CrpsImg+(bl->age-1)%8);
 }
 
-void I_PackDraw(Si16 x,Si16 y,void *b)
+void I_PackDraw(Si16 x,Si16 y,void *b, VIEWPORT*)
 {
 	DrawSWUImage(x-ItemImg[16].Width/2,y-ItemImg[16].Height/2,bl->own,ItemImg+16);
 }

@@ -156,7 +156,7 @@ void MakePlayerEvent(Si16 n, Si16 EventID, ...)
 	va_end(ap);
 }
 
-void EmptyDraw(Si16, Si16, void *)
+void EmptyDraw(Si16, Si16, void *, VIEWPORT*)
 {
 	return;
 }

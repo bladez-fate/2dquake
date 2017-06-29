@@ -370,5 +370,5 @@ void CONFIG::Default(void)
     FragLimit=15;
     TimeLimit=0;
     for(Si16 i=1;i<M_WPN;i++) StartWeapon[i]=0;
-    StartWeapon[0]=50;
+    StartWeapon[B_SHELL]=50;
 }

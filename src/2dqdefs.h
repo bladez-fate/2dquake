@@ -313,6 +313,7 @@ struct PLAYER
 };
 
 struct PACK;
+struct VIEWPORT;
 
 struct OBJECT
 {
@@ -325,8 +326,8 @@ struct OBJECT
     double sy;
     Si16 age;
     Si16 own;
-    void (*Handler)(void*);
-    void (*Draw)(Si16,Si16,void*);
+	void(*Handler)(void*);
+	void(*Draw)(Si16, Si16, void*, VIEWPORT*);
     //OBJECT(void) {x=0;y=0;sx=0;sy=0;age=0;own=0;}
 };
 
@@ -347,6 +348,7 @@ struct VIEWPORT
     void (*Focusing)(void*);
 
 	std::unique_ptr<FogFilter> fogFilter;
+	std::unique_ptr<LinFilter> linFilter;
 	std::unique_ptr<DmgFilter> dmgFilter;
 	FilterList filters;
 

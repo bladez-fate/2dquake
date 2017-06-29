@@ -32,7 +32,7 @@ void C_KMBattle(PLAYER *pl)
 
 	if (KF(kKeyMouseRight)) vp[0].ShowNames = 1;
 	
-	if (KF(kKeyMouseLeft)) { pl->cmnd[C_FIR] = 1; }
+	if (KF(kKeyMouseLeft)) { pl->cmnd[C_FIR] = 1; if (pl->State <= 0) KeyDown(kKeyMouseLeft); }
 	if (KF('Q')) { pl->cmnd[C_PRV] = 1; KeyDown('Q'); }
 	if (KF('E')) { pl->cmnd[C_NXT] = 1; KeyDown('E'); }
 	if (KF('F')) { pl->cmnd[C_USE] = 1; KeyDown('F'); }

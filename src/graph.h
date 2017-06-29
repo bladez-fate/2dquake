@@ -67,6 +67,26 @@ struct tPALETTE {
 extern tFONT g_font;
 extern tPALETTE g_palette;
 
+inline Rgba RgbaMult(Rgba c, Ui32 m)
+{
+	Ui32 rb = c.rgba & 0x00ff00ff;
+	Ui32 rbm = ((rb * m) >> 8) & 0x00ff00ff;
+	Ui32 ga = (c.rgba >> 8) & 0x00ff00ff;
+	Ui32 gam = ((ga * m)) & 0xff00ff00;
+	return Rgba(rbm | gam);
+}
+
+inline Rgba RgbSum(Rgba x, Rgba y)
+{
+	// TODO: is there any hardware summation with saturation?
+	return Rgba(
+		Ui16(x.r) + Ui16(y.r) > 255 ? 255 : x.r + y.r,
+		Ui16(x.g) + Ui16(y.g) > 255 ? 255 : x.g + y.g,
+		Ui16(x.b) + Ui16(y.b) > 255 ? 255 : x.b + y.b,
+		0
+	);
+}
+
 struct FogFilter {
 	// Config
 	static constexpr Ui16 angSize = 1024;
@@ -214,15 +234,6 @@ struct FogFilter {
 		});
 	}
 
-	static Rgba Mult(Rgba c, Ui32 m)
-	{
-		Ui32 rb = c.rgba & 0x00ff00ff;
-		Ui32 rbm = ((rb * m) >> 8) & 0x00ff00ff;
-		Ui32 ga = (c.rgba >> 8) & 0x00ff00ff;
-		Ui32 gam = ((ga * m)) & 0xff00ff00;
-		return Rgba(rbm | gam);
-	}
-
 	Rgba Apply(size_t pos, Rgba c) const
 	{
 		if (enabled) {
@@ -237,9 +248,128 @@ struct FogFilter {
 				l = std::min(l, std::max(minLight, 256 - 4*darkness));
 			}
 			l = std::max(minLight, l - darkenAll);
-			return Mult(c, l);
+			return RgbaMult(c, l);
 		}
 		return c;
+	}
+};
+
+struct LinFilter {
+	static constexpr int maxRadius = 200;
+
+	// Config
+	int x1;
+	int y1;
+	int x2;
+	int y2;
+	size_t w;
+	size_t h;
+	size_t size;
+	struct PixelData {
+		Si16 r16; // distance to the pixel center multiplied by 16
+		Si16 x;
+		Si16 y;
+		Si32 pos_delta;
+		bool operator<(const PixelData& rhs) const {
+			return r16 < rhs.r16;
+		}
+	};
+	std::vector<PixelData> pxl;
+
+	// State
+	int damageLeft = 0;
+	int max_damage = 0;
+
+	// Frame data
+	std::vector<Rgba> data;
+
+	LinFilter(int _x1, int _y1, int _x2, int _y2)
+		: x1(_x1), y1(_y1), x2(_x2), y2(_y2)
+		, w(x2 - x1 + 1), h(y2 - y1 + 1)
+		, size(w * h)
+		, data(screen::size)
+	{
+		for (int y = -maxRadius; y <= maxRadius; y++) {
+			for (int x = -maxRadius; x <= maxRadius; x++) {
+				int r16 = int(sqrt(x*x + y*y) * 16 + 0.5f);
+				if (r16 <= maxRadius * 16) {
+					PixelData p;
+					p.r16 = r16;
+					p.x = x;
+					p.y = y;
+					p.pos_delta = y * screen::w + x;
+					pxl.push_back(p);
+				}
+			}
+		}
+		std::sort(pxl.begin(), pxl.end());
+	}
+
+	void SpotLight(int x, int y, int r, Rgba c)
+	{
+		int r16 = r << 4;
+		float ak = float(c.a) / r16;
+		size_t pos = screen::pixel(x, y);
+		int r016 = 0;
+		Rgba c0 = c;
+		for (PixelData& p : pxl) {
+			if (r16 < p.r16) {
+				break;
+			}
+			if (r016 != p.r16) {
+				r016 = p.r16;
+				c0.a = c.a - ak * r016;
+			}
+			int x0 = x + p.x;
+			int y0 = y + p.y;
+			if (x0 >= x1 && y0 >= y1 && x0 <= x2 && y0 <= y2) {
+				BlendPixel(pos + p.pos_delta, c0);
+			}
+		}
+	}
+
+	void BlendPixel(size_t pos, Rgba c)
+	{
+		// Transforms 3-way symmetric blending into 2-way blending 
+		// x = k0 * v0 + (k1 * d + k2 * c)  --->   x = k0 * v0 + k * v
+		// k0 + k1 + k2 = 1 => k0 = 1 - k1 - k2 => k = 1 - k0 = k1 + k2
+		//
+		// , where: k = (k1 * k1 + k2 * k2) / (k1 + k2)
+		//          v = (k1 * d + k2 * c) / (k1 + k2)
+		// Is this right way? TODO: Check the 4-way blending order does not matter
+		Rgba& d = data[pos];
+		if (d.a == 0) {
+			d = c;
+		}
+		else {
+			Ui32 ca = c.a;
+			Ui32 da = d.a;
+			Ui32 k = ca * 256 / (ca + da);
+			Rgba v1 = RgbaMult(c, k);
+			Rgba v2 = RgbaMult(d, 255 - k);
+			d = RgbSum(v1, v2);
+			d.a = 255 - ((255 - ca)*(255 - da) >> 8);
+		}
+	}
+
+	Rgba Apply(size_t pos, Rgba c) const
+	{
+		Rgba d = data[pos];
+		if (d.a == 0) {
+			return c;
+		}
+		else {
+			Ui16 da = d.a;
+			Ui16 ca = 256 - da;
+			Rgba v1 = RgbaMult(c, ca);
+			Rgba v2 = RgbaMult(d, da);
+			return RgbSum(v1, v2);
+		}
+	}
+
+	void Refresh()
+	{
+		memset(&data[0], 0, sizeof(Rgba) * data.size());
 	}
 };
 
@@ -317,11 +447,13 @@ struct DmgFilter {
 
 struct FilterList {
 	FogFilter* fog_;
+	LinFilter* lin_;
 	DmgFilter* dmg_;
 
 	Rgba Apply(size_t pos, Rgba c) const
 	{
 		c = fog_->Apply(pos, c);
+		c = lin_->Apply(pos, c);
 		c = dmg_->Apply(pos, c);
 		return c;
 	}
