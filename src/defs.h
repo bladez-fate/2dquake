@@ -11,6 +11,7 @@ Copyright by Andre 2001
 #define _USE_MATH_DEFINES
 
 #include <stdlib.h>
+#include <utility>
 #include "engine/arctic_types.h"
 #include "engine/vec2si32.h"
 
