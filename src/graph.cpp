@@ -6,7 +6,7 @@
 #include "defs.h"
 
 #include <stdio.h>
-#include <conio.h>
+//#include <conio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -452,6 +452,12 @@ void OutText(Si16 x, Si16 y, const char* text, tFONT* font)
 		}
 		x += font->Height + font->Intervals;
 	}
+}
+
+void GetTextJust(BYTE& x, BYTE& y)
+{
+    x = fnJustX;
+    y = fnJustY;
 }
 
 void SetTextJust(BYTE x,BYTE y)

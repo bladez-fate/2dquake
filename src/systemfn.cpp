@@ -9,7 +9,7 @@ Copyright by bladez-fate
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
+//#include <conio.h>
 
 #include "2dqdefs.h"
 #include "keyboard.h"
@@ -279,37 +279,37 @@ Si16 Random(Si16 Num)
 Si16 InitRandom(void)
 {
     FILE *Source;
-    if ((Source = fopen("SYSTEM\\RANDOM3", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random3", "rb")) == NULL) {return 0;}
     if((_Random3 = (BYTE *) malloc(30)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random3,1,30,Source);
     fclose(Source);
-    if ((Source = fopen("SYSTEM\\RANDOM4", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random4", "rb")) == NULL) {return 0;}
     if((_Random4 = (BYTE *) malloc(40)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random4,1,40,Source);
     fclose(Source);
-    if ((Source = fopen("SYSTEM\\RANDOM6", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random6", "rb")) == NULL) {return 0;}
     if((_Random6 = (BYTE *) malloc(60)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random6,1,60,Source);
     fclose(Source);
-    if ((Source = fopen("SYSTEM\\RANDOM7", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random7", "rb")) == NULL) {return 0;}
     if((_Random7 = (BYTE *) malloc(70)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random7,1,70,Source);
     fclose(Source);
-    if ((Source = fopen("SYSTEM\\RANDOM9", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random9", "rb")) == NULL) {return 0;}
     if((_Random9 = (BYTE *) malloc(90)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random9,1,90,Source);
     fclose(Source);
-    if ((Source = fopen("SYSTEM\\RANDOM21", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random21", "rb")) == NULL) {return 0;}
     if((_Random21 = (BYTE *) malloc(210)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random21,1,210,Source);
     fclose(Source);
-    if ((Source = fopen("SYSTEM\\RANDOM61", "rb")) == NULL) {return 0;}
+    if ((Source = fopen("system/random21", "rb")) == NULL) {return 0;}
     if((_Random61 = (BYTE *) malloc(610)) == NULL)
     {fclose(Source);return 0;}
     fread(_Random61,1,610,Source);

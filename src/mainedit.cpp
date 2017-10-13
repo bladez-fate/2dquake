@@ -7,12 +7,12 @@ Copyleft by bladez-fate
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <process.h>
+//#include <process.h>
 #include <string.h>
-#include <conio.h>
-#include <dos.h>
+//#include <conio.h>
+//#include <dos.h>
 #include <math.h>
-#include <conio.h>
+//#include <conio.h>
 
 #include "graph.h"
 #include "keyboard.h"

@@ -100,3 +100,80 @@ typedef void (*PROC)(void);
 #define MAKEPTR(seg,off)    ((PVOID)MAKEDWORD(off,seg))
 #define PTRSEG(ptr)         ((WORD)HIWORD(ptr))
 #define PTROFF(ptr)         ((WORD)LOWORD(ptr))
+
+/* A utility function to reverse a string  */
+inline void _reverse(char str[], int length)
+{
+    int start = 0;
+    int end = length -1;
+    while (start < end)
+    {
+        std::swap(*(str+start), *(str+end));
+        start++;
+        end--;
+    }
+}
+
+// Implementation of itoa()
+inline char* _itoa(int num, char* str, int base)
+{
+    int i = 0;
+    bool isNegative = false;
+    
+    /* Handle 0 explicitely, otherwise empty string is printed for 0 */
+    if (num == 0)
+    {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    }
+    
+    // In standard itoa(), negative numbers are handled only with
+    // base 10. Otherwise numbers are considered unsigned.
+    if (num < 0 && base == 10)
+    {
+        isNegative = true;
+        num = -num;
+    }
+    
+    // Process individual digits
+    while (num != 0)
+    {
+        int rem = num % base;
+        str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
+        num = num/base;
+    }
+    
+    // If number is negative, append '-'
+    if (isNegative)
+        str[i++] = '-';
+    
+    str[i] = '\0'; // Append string terminator
+    
+    // Reverse the string
+    _reverse(str, i);
+    
+    return str;
+}
+
+// Implementation of strlwr()
+inline char* _strlwr(char * s)
+{
+    char *t = s;
+    
+    if (!s)
+    {
+        return 0;
+    }
+    
+    while (*t != '\0' )
+    {
+        if (*t >= 'A' && *t <= 'Z')
+        {
+            *t = *t + ('a' - 'A');
+        }
+        t++;
+    }
+    
+    return s;
+}

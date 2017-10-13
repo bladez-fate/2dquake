@@ -6,7 +6,7 @@ Copyright by bladez-fate
 
 #include "defs.h"
 
-#include <conio.h>
+//#include <conio.h>
 #include <stdio.h>
 #include "defs.h"
 #include "2dqdefs.h"

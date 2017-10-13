@@ -33,8 +33,11 @@ BYTE ShowScreenImage(char *FileName)
 
 void InputMenu(char *dst, char *msg, Si16 dstSize)
 {
+    BYTE jx,jy;
+    GetTextJust(jx, jy);
+    SetTextJust(1, 1);
 	while (true) {
-		ShowScreenImage("images/MENU.RAW");
+		ShowScreenImage("images/menu.raw");
 		SetColor(MENU_COL3);
 		OutText(screen::cx + 2, screen::cy - 10 + 2, msg, &g_font); // was 162 92
 		SetColor(MENU_COL1);
@@ -94,6 +97,7 @@ void InputMenu(char *dst, char *msg, Si16 dstSize)
 			*/
 		}
 	}
+    SetTextJust(jx, jy);
 }
 
 void MessageMenu(const char *msg)

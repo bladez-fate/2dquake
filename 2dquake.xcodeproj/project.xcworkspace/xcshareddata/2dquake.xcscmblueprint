@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "41141024177A43E97EE213D463F5C0EF6E03E58A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D4A6BE7492A1CA448EB01E265AB2D06AF8EEFC68" : 9223372036854775807,
+    "41141024177A43E97EE213D463F5C0EF6E03E58A" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "CCFD6964-97CC-49EA-A7C4-C527CF2CCF05",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D4A6BE7492A1CA448EB01E265AB2D06AF8EEFC68" : "arctic\/",
+    "41141024177A43E97EE213D463F5C0EF6E03E58A" : "2dquake\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "2dquake",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "2dquake.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/bladez-fate\/2dquake.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "41141024177A43E97EE213D463F5C0EF6E03E58A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/FrostyMorning\/arctic.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D4A6BE7492A1CA448EB01E265AB2D06AF8EEFC68"
+    }
+  ]
+}

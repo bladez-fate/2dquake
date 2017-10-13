@@ -104,9 +104,9 @@ struct FogFilter {
 	static constexpr float angDelta = 2.0f * float(M_PI) / angSize;
 	static constexpr int maxSightDistance = 200;
 	static constexpr int clearSightDistance = 140;
-	static constexpr int minSightDistance = 7;
-	static constexpr int minLight = 64;
-	static constexpr int maxLight = 256;
+	const int minSightDistance = 7;
+	const int minLight = 64;
+	const int maxLight = 256;
 
 	int x1;
 	int y1;
@@ -215,7 +215,7 @@ struct FogFilter {
 			if (a == angSize) {
 				a = 0;
 			}
-			ang[a].sightDistance = std::max<int>(minSightDistance, std::min<int>(ang[a].sightDistance, p.r));
+            ang[a].sightDistance = std::max<int>(FogFilter::minSightDistance, std::min<int>(ang[a].sightDistance, p.r));
 		}
 	}
 
@@ -557,7 +557,8 @@ void Line(Si16 x1, Si16 y1, Si16 x2, Si16 y2);
 void MakeBufferWindow(Si16 x1,Si16 y1,Si16 x2,Si16 y2);
 void NoBufferWindow(void);
 void OutText(Si16 x, Si16 y, const char *Text, tFONT *g_font);
-void SetTextJust(BYTE x,BYTE y);
+void GetTextJust(BYTE& x, BYTE& y);
+void SetTextJust(BYTE x, BYTE y);
 BYTE LoadImage(char  *FileName,tIMAGE  *Img);
 void FreeImage(tIMAGE  *Img);
 void DrawSWImage(Si16 x,Si16 y,tIMAGE  *Img);

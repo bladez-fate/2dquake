@@ -7,10 +7,10 @@ Copyright by bladez-fate
 
 #include <stdio.h>
 #include <string.h>
-#include <conio.h>
-#include <dos.h>
+//#include <conio.h>
+//#include <dos.h>
 #include <math.h>
-#include <conio.h>
+//#include <conio.h>
 #include <stdarg.h>
 #include <time.h>
 
@@ -36,24 +36,24 @@ char MapName[64];
 BYTE BotEnable;
 Si16 mnuMainAmount=5;
 char mnuMain[5][15] = {
-	"Новая Игра",
-	"Разработчики",
-	"Демо",
-	"Редактор",
-	"Выход"
+	"New Game",
+	"Credits",
+	"Demo",
+	"Editor",
+	"Exit"
 };
 Si16 mnuGameAmount = 10;
 char mnuGame[10][30] = {
-	"Кол-во Игроков     ",
-	"Кол-во Ботов       ",
-	"Предел Фрагов        ",
-	"Предел Времени       ",
-	"Карта                     ",
-	"Имя Игрока 1            ",
-	"Имя Игрока 2            ",
-	"Сетевой Статус        ",
-	"Старт",
-	"Обратно"
+	"Players",
+	"Bots",
+	"Frag Limit",
+	"Time Limit",
+	"Map",
+	"Player1",
+	"Player2",
+	"Network",
+	"Start",
+	"Back"
 };
 Si16 mnuCreditsAmount=13;
 char mnuCredits[13][50] = {
@@ -470,9 +470,9 @@ void Start(void)
         char tmpstr[32];
         if((cfg.TimeLimit%100>10 && cfg.TimeLimit%100<20)
                 || cfg.TimeLimit%10>4 || cfg.TimeLimit%10==0)
-            sprintf(tmpstr,"%hd Минут",cfg.TimeLimit);
+            sprintf(tmpstr,"%hd Munutes",cfg.TimeLimit);
         else if(cfg.TimeLimit%10>1) sprintf(tmpstr,"%hd Минуты",cfg.TimeLimit);
-        else sprintf(tmpstr,"%hd Минута",cfg.TimeLimit);
+        else sprintf(tmpstr,"%hd Minutes",cfg.TimeLimit);
         vp[0].MakeMessage(tmpstr,MSG_TIME);vp[1].MakeMessage(tmpstr,MSG_TIME);
         vp[0].MakeMessage(MapName,MSG_TIME);vp[1].MakeMessage(MapName,MSG_TIME);
     }
@@ -997,7 +997,7 @@ void CloseMap(void)
 void NextMap(Si16 NewMapNum)
 {
     FILE *src;
-    if((src=fopen("MAPS\\MAPS.CFG","rt"))==NULL) {return;}
+    if((src=fopen("maps/maps.cfg","rt"))==NULL) {return;}
     char tmpstr[64];
     Si16 tmpi;
     Si16 MapAmount;
@@ -1020,13 +1020,17 @@ void NextMap(Si16 NewMapNum)
         fscanf(src," %c",tmpstr);
         if(tmpstr[0]!=']') {fclose(src);return;}
         fscanf(src," %c",tmpstr);
-        if(tmpstr[0]!='=') {fclose(src);return;}
+        if(tmpstr[0]!='=') {
+            fclose(src);return;}
         fscanf(src," %c",tmpstr);
-        if(tmpstr[0]!='"') {fclose(src);return;}
+        if(tmpstr[0]!='"') {
+            fclose(src);return;}
         fscanf(src,"%[^\"]",tmpstr);
-        if(i==MapNum) break;
+        if(i==MapNum)
+            break;
         fscanf(src," %c",tmpstr);
-        if(tmpstr[0]!='"') {fclose(src);return;}
+        if(tmpstr[0]!='"') {
+            fclose(src);return;}
     }
     fclose(src);
     if((src=fopen(tmpstr,"rt"))==NULL) {return;}
@@ -1074,7 +1078,7 @@ void NextMap(Si16 NewMapNum)
 Si16 InitializeMap(Si16 N)
 {
     FILE *src;
-    if((src=fopen("MAPS\\MAPS.CFG","rt"))==NULL) {return 0;}
+    if((src=fopen("maps/maps.cfg","rt"))==NULL) {return 0;}
     char tmpstr[64];
     Si16 tmpi;
     Si16 MapAmount;
@@ -1082,8 +1086,10 @@ Si16 InitializeMap(Si16 N)
     _strlwr(tmpstr);
     if(strcmp(tmpstr,"mapamount")!=0) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='=') {fclose(src);return 0;}
     fscanf(src," %hd",&MapAmount);
+    _strlwr(tmpstr);
     if(N>=MapAmount) {fclose(src);return 0;}
     for(Si16 i=0;i<MapAmount;i++)
     {
@@ -1091,18 +1097,25 @@ Si16 InitializeMap(Si16 N)
         _strlwr(tmpstr);
         if(strcmp(tmpstr,"mapfilename")!=0) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='[') {fclose(src);return 0;}
         fscanf(src," %hd",&tmpi);
+        _strlwr(tmpstr);
         if(i!=tmpi) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!=']') {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='=') {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='"') {fclose(src);return 0;}
         fscanf(src,"%[^\"]",tmpstr);
+        _strlwr(tmpstr);
         if(i==N) break;
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='"') {fclose(src);return 0;}
     }
     fclose(src);
@@ -1113,53 +1126,71 @@ Si16 InitializeMap(Si16 N)
     _strlwr(tmpstr);
     if(strcmp(tmpstr,"name")!=0) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='=') {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     fscanf(src,"%[^\"]",tmpstr);
+    _strlwr(tmpstr);
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     /* MapFile */
     fscanf(src," %[a-zA-Z]",tmpstr);
     _strlwr(tmpstr);
     if(strcmp(tmpstr,"mapfile")!=0) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='=') {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     fscanf(src,"%[^\"]",tmpstr);
+    _strlwr(tmpstr);
     if(!LoadImage(tmpstr,&Map)) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     /* BotFile */
     fscanf(src," %[a-zA-Z]",tmpstr);
     _strlwr(tmpstr);
     if(strcmp(tmpstr,"botfile")!=0) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='=') {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     fscanf(src,"%[^\"]",BotFileName);
+    _strlwr(tmpstr);
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     /* ItemFile */
     fscanf(src," %[a-zA-Z]",tmpstr);
     _strlwr(tmpstr);
     if(strcmp(tmpstr,"itemfile")!=0) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='=') {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     fscanf(src,"%[^\"]",ItemFileName);
+    _strlwr(tmpstr);
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='"') {fclose(src);return 0;}
     /* Terrain Images */
     fscanf(src," %[a-zA-Z]",tmpstr);
     _strlwr(tmpstr);
     if(strcmp(tmpstr,"terrainimageamount")!=0) {fclose(src);return 0;}
     fscanf(src," %c",tmpstr);
+    _strlwr(tmpstr);
     if(tmpstr[0]!='=') {fclose(src);return 0;}
     fscanf(src," %hd",&TerAmount);
+    _strlwr(tmpstr);
 
     for(Si16 i=0;i<TerAmount;i++)
     {
@@ -1167,42 +1198,60 @@ Si16 InitializeMap(Si16 N)
         _strlwr(tmpstr);
         if(strcmp(tmpstr,"mapimage")!=0) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='[') {fclose(src);return 0;}
         fscanf(src," %hd",&tmpi);
+        _strlwr(tmpstr);
         if(i!=tmpi) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!=']') {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='=') {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='"') {fclose(src);return 0;}
         fscanf(src,"%[^\"]",tmpstr);
+        _strlwr(tmpstr);
         if(!LoadImage(tmpstr,MpImg+i)) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='"') {fclose(src);return 0;}
 
         fscanf(src," %[a-zA-Z]",tmpstr);
         _strlwr(tmpstr);
         if(strcmp(tmpstr,"mapmasks")!=0) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='[') {fclose(src);return 0;}
         fscanf(src," %hd",&tmpi);
+        _strlwr(tmpstr);
         if(i!=tmpi) {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!=']') {fclose(src);return 0;}
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='=') {fclose(src);return 0;}
 
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='{') {fclose(src);return 0;}
         fscanf(src,"%hd",&tmpi); MF_PlrSee[i]=tmpi;
+        _strlwr(tmpstr);
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!=',') {fclose(src);return 0;}
         fscanf(src,"%hd",&tmpi); MF_BltMov[i]=tmpi;
+        _strlwr(tmpstr);
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!=',') {fclose(src);return 0;}
         fscanf(src,"%hd",&tmpi); MF_PlrMov[i]=tmpi;
+        _strlwr(tmpstr);
         fscanf(src," %c",tmpstr);
+        _strlwr(tmpstr);
         if(tmpstr[0]!='}') {fclose(src);return 0;}
     }
 
@@ -1234,7 +1283,7 @@ BYTE MainMenu(void)
         if(KF(kKeyEnter)) {KeyDown(kKeyEnter);
             Si16 a=0;
             switch(cur) {
-            case 0: if(GameMenu()) {a=1;} break;
+            case 0: if(GameMenu()) {a=1;} SetTextJust(1,1); break;
             case 1: CreditsMenu(); break;
             case 2: HelpMenu(); a=1; break;
 			case 3: 
@@ -1257,6 +1306,7 @@ BYTE MainMenu(void)
     g_palette.Set();
     return cur;
 }
+
 BYTE GameMenu(void)
 {
     Si16 cur=0;
@@ -1267,29 +1317,34 @@ BYTE GameMenu(void)
         ShowScreenImage("images/menu.raw");
 		for (Si16 i = 0; i < mnuGameAmount; i++) {
 			Si16 y = screen::cy - mnuGameAmount * 8 + i * 16;
-			Si16 x;
+            BYTE justx = 2;
+            Si16 gap = 8;
 			char tmpstr[30];
 			switch (i) {
-			case 0: sprintf(tmpstr, "%hd", PlayersIn); x = screen::cx + 80; break;
-			case 1: sprintf(tmpstr, "%hd", BotsIn); x = screen::cx + 80; break;
-			case 2: sprintf(tmpstr, "%hd", cfg.FragLimit); x = screen::cx + 88; break;
-			case 3: sprintf(tmpstr, "%hd", cfg.TimeLimit); x = screen::cx + 88; break;
-			case 4: strcpy(tmpstr, MapName); x = screen::cx + 60; break;
-			case 5: strcpy(tmpstr, Name1); x = screen::cx + 60; break;
-			case 6: strcpy(tmpstr, Name2); x = screen::cx + 60; break;
-				//case 7: strcpy(tmpstr, NetStatus ? ((NetStatus - 1) ? "Second" : "ПFirst") : "НNo"); x = 220; break;
-			case 7: strcpy(tmpstr, "Local"); x = screen::cx + 60; break;
-			default: tmpstr[0] = 0;
+			case 0: sprintf(tmpstr, "%hd", PlayersIn); break;
+			case 1: sprintf(tmpstr, "%hd", BotsIn); break;
+			case 2: sprintf(tmpstr, "%hd", cfg.FragLimit); break;
+			case 3: sprintf(tmpstr, "%hd", cfg.TimeLimit); break;
+			case 4: strcpy(tmpstr, MapName); break;
+			case 5: strcpy(tmpstr, Name1); break;
+			case 6: strcpy(tmpstr, Name2); break;
+            //case 7: strcpy(tmpstr, NetStatus ? ((NetStatus - 1) ? "Second" : "First") : "No"); x = 220; break;
+			case 7: strcpy(tmpstr, "Local"); break;
+            default: tmpstr[0] = 0; justx = 1; gap = 0;
 			}
 			SetColor(MENU_COL3);
-			OutText(screen::cx + 2, y + 2, mnuGame[i], &g_font);
-			OutText(x + 2, y + 2, tmpstr, &g_font);
+            SetTextJust(justx,1);
+			OutText(screen::cx - gap + 2, y + 2, mnuGame[i], &g_font);
+            SetTextJust(0,1);
+			OutText(screen::cx + gap + 2, y + 2, tmpstr, &g_font);
 			SetColor(i == cur ? MENU_COL2 : MENU_COL1);
 			if (i == 1 && !BotEnable) {
 				SetColor(MENU_COL4);
 			}
-			OutText(screen::cx, y, mnuGame[i], &g_font);
-			OutText(x, y, tmpstr, &g_font);
+            SetTextJust(justx,1);
+			OutText(screen::cx - gap, y, mnuGame[i], &g_font);
+            SetTextJust(0,1);
+			OutText(screen::cx + gap, y, tmpstr, &g_font);
 		}
         ShowScreen();
         if(KF(kKeyEscape)) {KeyDown(kKeyEscape);cur=0;break;}
@@ -1562,11 +1617,11 @@ void EasyMain(void)
 				}
                 SetTextJust(1,1);
                 SetColor(120);
-                sprintf(tmpstr,"Время Игры %02hd:%02hd:%02hd"
+                sprintf(tmpstr,"Time %02hd:%02hd:%02hd"
                         ,Si16(GameTime/3600),Si16((GameTime/60)%60),Si16(GameTime%60));
 				if (cfg.FragLimit) {
 					OutText(screen::cx, screen::cy - 50, tmpstr, &g_font);
-					sprintf(tmpstr, "Предел Фрагов %6hd", cfg.FragLimit);
+					sprintf(tmpstr, "FragLimit %hd", cfg.FragLimit);
 					OutText(screen::cx, screen::cy - 30, tmpstr, &g_font);
 				}
 				else {
@@ -1576,10 +1631,10 @@ void EasyMain(void)
                 sprintf(tmpstr, "FPS Limit  %9hd",cfg.MaxFps);
                 OutText(screen::cx, screen::cy - 10,tmpstr,&g_font);
                 SetColor(127);
-                OutText(screen::cx, screen::cy + 10, "Выйти в Главное Меню",&g_font);
+                OutText(screen::cx, screen::cy + 10, "Exit Game",&g_font);
                 SetColor(127);
-                OutText(screen::cx, screen::cy + 30, "Выйти из 2D Quake",&g_font);
-                OutText(screen::cx, screen::cy + 50, "Продолжить",&g_font);
+                OutText(screen::cx, screen::cy + 30, "Exit 2D Quake",&g_font);
+                OutText(screen::cx, screen::cy + 50, "Continue",&g_font);
                 ShowScreen();
                 Si16 cur=0;
                 while(1) {
@@ -1590,13 +1645,13 @@ void EasyMain(void)
                     OutText(screen::cx, screen::cy - 10,tmpstr,&g_font);
                     if(cur==1) SetColor(79);
                     else SetColor(127);
-                    OutText(screen::cx, screen::cy+10, "Выйти в Главное Меню",&g_font);
+                    OutText(screen::cx, screen::cy+10, "Exit Game",&g_font);
                     if(cur==2) SetColor(79);
                     else SetColor(127);
-                    OutText(screen::cx, screen::cy+30, "Выйти из 2D Quake",&g_font);
+                    OutText(screen::cx, screen::cy+30, "Exit 2D Quake",&g_font);
                     if(cur==3) SetColor(79);
                     else SetColor(127);
-                    OutText(screen::cx, screen::cy+50, "Продолжить",&g_font);
+                    OutText(screen::cx, screen::cy+50, "Continue",&g_font);
                     ShowScreen();
 
                     if(KF(kKeyEscape)) {KeyDown(kKeyEscape);break;}
@@ -1622,12 +1677,12 @@ void EasyMain(void)
             {
                 switch(EndGame) {
                 case EG_TIMELIMIT:
-                    vp[0].MakeMessage("Время Вышло");
-                    if(Control2!=-1) vp[1].MakeMessage("Время Вышло");
+                    vp[0].MakeMessage("Time Limit");
+                    if(Control2!=-1) vp[1].MakeMessage("Time Limit");
                     break;
                 case EG_FRAGLIMIT:
-                    vp[0].MakeMessage("Предел Фрагов");
-                    if(Control2!=-1) vp[1].MakeMessage("Предел Фрагов");
+                    vp[0].MakeMessage("Frag Limit");
+                    if(Control2!=-1) vp[1].MakeMessage("Frag Limit");
                     break;
                 case EG_SYSPAUSE:
 					while (!(KF(kKeyEscape)) && !(KF(kKeyEnter))) {
