@@ -137,6 +137,7 @@ void ShowScreen(void)
 
 BYTE InitGraph(void)
 {
+    SetInverseY(true);
 	ResizeScreen(screen::w, screen::h);
 	g_backBuffer = GetEngine()->GetBackbuffer().RgbaData();
 	Clear();
